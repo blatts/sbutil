@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+# -*- mode: Python; coding: latin-1 -*-
+# Time-stamp: "2014-02-21 18:07:45 sb"
+
+#  file       SConscript
+#  copyright  (c) Sebastian Blatt 2013, 2014
+
+# environment variables:
+#   LIBPATH, LIBS, ASFLAGS, LINKFLAGS, CPPFLAGS, CPPPATH, CCFLAGS
+
+Import('env')
+
+env.StaticLibrary('sbutil',
+                  ['CommandLine.cc',
+                   'PerformanceCounter.cc',
+                   'ProgressIndicator.cc',
+                   'Representable.cc',
+                   'StringVector.cc',
+                   ])
+
+# SConscript ends here
