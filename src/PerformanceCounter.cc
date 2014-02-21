@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 14:17:25 sb"
+// Time-stamp: "2014-02-21 18:34:04 sb"
 
 /*
   file       PerformanceCounter.cc
@@ -9,10 +9,6 @@
 
 
 #include "PerformanceCounter.hh"
-
-#ifdef WIN32
-#include <windows.h>
-#endif
 
 PerformanceCounter::PerformanceCounter()
   : frequency(0),

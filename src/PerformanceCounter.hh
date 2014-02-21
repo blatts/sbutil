@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 14:17:05 sb"
+// Time-stamp: "2014-02-21 18:34:08 sb"
 
 /*
   file       PerformanceCounter.hh
@@ -12,6 +12,10 @@
 #define PERFORMANCECOUNTER_HH__C9D42287_FFDA_45F5_9571_BF7F86011F8F
 
 #include <ctime>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 class PerformanceCounter {
   private:
