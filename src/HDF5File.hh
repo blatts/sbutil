@@ -1,9 +1,11 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-10-22 09:11:50 sb"
+// Time-stamp: "2014-02-21 19:38:46 sb"
 
 /*
   file       HDF5File.hh
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+
+  Wraps libhdf5 functions to simplify creating HDF5 files.
 
 */
 
@@ -14,11 +16,35 @@
 #include <string>
 #include <vector>
 
+// Want to include this since HDF5 internals can be exposed by the
+// classes below.
 extern "C" {
 #include <hdf5.h>
+}
+
+// Forward declarations to prevent GSL from being a compile time
+// requirement if not even used. Unfortunately, GSL uses old-style
+// typedefs for structs that cannot be forward-declared cleanly. Have
+// to do this bullshit:
+//
+// https://sourceware.org/ml/gsl-discuss/2002-q4/msg00268.html
+//
+
+#ifdef COMPILING_THIS_SHIT_C9911449_35DB_497B_8A56_7978C1957F3B
+
+extern "C" {
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_complex.h>
 }
+
+#else
+
+typedef struct gsl_vector gsl_vector;
+typedef struct gsl_vector_complex gsl_vector_complex;
+typedef struct gsl_matrix gsl_matrix;
+typedef struct gsl_matrix_complex gsl_matrix_complex;
+
+#endif // COMPILING_THIS_SHIT_C9911449_35DB_497B_8A56_7978C1957F3B
 
 namespace HDF5
 {

@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2013-12-05 17:39:31 sb"
+// Time-stamp: "2014-02-21 20:03:39 sb"
 
 /*
   file       ProgressIndicator.cc
-  copyright  (c) Sebastian Blatt 2012, 2013
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 
@@ -22,6 +22,8 @@ ProgressIndicator::ProgressIndicator()
     current_position(0)
 {}
 
+// FIXME: Timing should be rebased on PerformanceCounter class or
+// C++11 std::clock.
 class ProgressTime : public Representable {
   public:
     size_t dt;
