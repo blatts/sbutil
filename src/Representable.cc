@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2013-05-17 15:26:33 sb"
+// Time-stamp: "2014-02-21 19:57:38 sb"
 
 /*
   file       Representable.cc
-  copyright  (c) Sebastian Blatt 2011, 2012, 2013
+  copyright  (c) Sebastian Blatt 2011, 2012, 2013, 2014
 
  */
 
@@ -56,9 +56,10 @@ std::ostream& EnglishPluralize::Represent(std::ostream& out) const{
   return out;
 }
 
+// FIXME: This should be rebased on PerformanceCounter abstraction
+// over timing information.
 std::ostream& TimeNow::Represent(std::ostream& out) const{
   time_t t = time(0);
-
 #if WIN32
   struct tm tmp;
   struct tm* p_tmp = &tmp;
