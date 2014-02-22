@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 19:57:38 sb"
+// Time-stamp: "2014-02-21 20:02:46 sb"
 
 /*
   file       Representable.cc
@@ -57,7 +57,7 @@ std::ostream& EnglishPluralize::Represent(std::ostream& out) const{
 }
 
 // FIXME: This should be rebased on PerformanceCounter abstraction
-// over timing information.
+// over timing information or C++11 std::clock.
 std::ostream& TimeNow::Represent(std::ostream& out) const{
   time_t t = time(0);
 #if WIN32

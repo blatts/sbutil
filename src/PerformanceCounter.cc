@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 19:56:32 sb"
+// Time-stamp: "2014-02-21 19:59:04 sb"
 
 /*
   file       PerformanceCounter.cc
@@ -28,7 +28,11 @@ PerformanceCounter::PerformanceCounter()
 
   // FIXME: This currently punts to time(). Equivalent timing
   // implementation as on WIN32 needs to be done for DARWIN and
-  // posix platforms!
+  // posix platforms! Good reference
+  //
+  // https://github.com/bittorrent/libutp/blob/master/utp_utils.cpp
+  //
+  // Second option should use new C++11 std::clock stuff.
 
   frequency = 1;
   counter_start = time(0);
