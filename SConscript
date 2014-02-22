@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-21 18:40:14 sb"
+# Time-stamp: "2014-02-21 18:42:21 sb"
 
 #  file       SConstruct
 #  copyright  (c) Sebastian Blatt 2013, 2014
@@ -36,7 +36,7 @@ if use_clang:
   cxx = 'clang++'
   env.Replace(CC = cc, CXX = cxx)
 
-cxxflags = '-g -O3'
+cxxflags = '-g -O3 -std=c++11'
 linkflags = ''
 
 cxxflags += " " + " ".join(map(lambda w: '-W%s' % w, warnings))
