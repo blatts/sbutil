@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-21 18:40:14 sb"
+# Time-stamp: "2014-02-21 18:49:25 sb"
 
 #  file       SConstruct
 #  copyright  (c) Sebastian Blatt 2013, 2014
@@ -10,7 +10,7 @@
 
 import os.path
 
-use_clang = True
+use_clang = False #True
 
 build_directory = 'build/scons/'
 

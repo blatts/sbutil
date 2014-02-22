@@ -1,16 +1,21 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-11-19 10:53:49 sb"
+// Time-stamp: "2014-02-21 19:29:55 sb"
 
 /*
   file       HDF5File.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 
+
+#define COMPILING_THIS_SHIT = 1
 #include "HDF5File.hh"
+#undef COMPILING_THIS_SHIT
+
 #include "Exception.hh"
 #include "OutputManipulator.hh"
 #include "WrappedCall.hh"
+
 
 #include <sstream>
 #include <cassert>
