@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 19:29:55 sb"
+// Time-stamp: "2014-02-21 19:38:58 sb"
 
 /*
   file       HDF5File.cc
@@ -7,10 +7,10 @@
 
  */
 
-
-#define COMPILING_THIS_SHIT = 1
+// See header for explanation.
+#define COMPILING_THIS_SHIT_C9911449_35DB_497B_8A56_7978C1957F3B = 1
 #include "HDF5File.hh"
-#undef COMPILING_THIS_SHIT
+#undef COMPILING_THIS_SHIT_C9911449_35DB_497B_8A56_7978C1957F3B
 
 #include "Exception.hh"
 #include "OutputManipulator.hh"
