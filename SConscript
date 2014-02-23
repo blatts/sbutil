@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-22 21:28:20 sb"
+# Time-stamp: "2014-02-22 21:41:01 sb"
 
-#  file       SConstruct
+#  file       SConscript
 #  copyright  (c) Sebastian Blatt 2013, 2014
 
 # environment variables:
@@ -12,7 +12,8 @@ import os.path
 
 # Import environment exported in calling SConstruct file
 Import('env', 'using_cxx11')
-
+# Copy environment so that we do not modify upstairs
+localenv = env.Clone()
 
 build_directory = 'build/scons/'
 
@@ -41,14 +42,14 @@ cxxflags += " " + " ".join(map(lambda w: '-W%s' % w, warnings))
 linkflags += " " + " ".join(map(lambda f: '-framework %s' % f, frameworks))
 
 
-env.Append(LINKFLAGS = linkflags)
-env.Append(LIBPATH = library_directories)
-env.Append(CPPPATH = include_directories)
-env.Append(CXXFLAGS = cxxflags)
+localenv.Append(LINKFLAGS = linkflags)
+localenv.Append(LIBPATH = library_directories)
+localenv.Append(CPPPATH = include_directories)
+localenv.Append(CXXFLAGS = cxxflags)
 
 SConscript('src/SConscript',
            variant_dir = build_directory + 'sbutil',
            duplicate = 0,
-           exports = 'env')
+           exports = {'env' : localenv})
 
-# SConstruct ends here
+# SConscript ends here
