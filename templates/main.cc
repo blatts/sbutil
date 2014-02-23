@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-23 00:01:08 sb"
+// Time-stamp: "2014-02-23 11:34:34 sb"
 
 /*
   file       :::project:::.cc
@@ -9,7 +9,7 @@
 
 #define PROGRAM_NAME ":::project:::"
 #define PROGRAM_DESCRIPTION "My new program"
-#define PROGRAM_COPYRIGHT "(C) Sebastian Blatt :::year:::"
+#define PROGRAM_COPYRIGHT "Copyright (C) :::author::: :::year:::"
 #define PROGRAM_VERSION ":::today:::"
 
 #define DEBUG 1

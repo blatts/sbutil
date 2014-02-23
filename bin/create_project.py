@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-23 00:02:40 sb"
+# Time-stamp: "2014-02-23 11:39:12 sb"
 
 #  file       create_project.py
 #  copyright  (c) Sebastian Blatt 2014
 
-import os, sys, subprocess, re, os.path
+import os
+import os.path
+import sys
+import subprocess
+import time
+import re
 
 def run_external(cmd):
   print "run_external: \"%s\"" % (cmd)
@@ -40,15 +45,21 @@ if __name__ == "__main__":
   run_external(['git', 'clone', 'https://github.com/blatts/sbutil.git'])
 
   # now have access to templates, copy and substitute
+  tm = time.localtime()
   replacements = {
     r'project' : project,
-    r'today' : '19990909',
-    r'year' : '2041'
+    r'today' : time.strftime('%Y%m%d', tm),
+    r'year' : time.strftime('%Y', tm)
     }
 
-  copy_replace_template(os.path.join('.','sbutil','templates','main.cc'),
-                        os.path.join('.','%.cc' % project),
-                        replacements)
+  files = [('main.cc', '%s.cc' % project),
+           ('SConstruct', 'SConstruct'),
+           ('SConscript', 'SConscript')]
+
+  for x in files:
+    copy_replace_template(os.path.join('.','sbutil','templates', x[0]),
+                          os.path.join('.', x[1]),
+                          replacements)
 
 
 
