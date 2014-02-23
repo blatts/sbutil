@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-22 19:21:26 sb"
+# Time-stamp: "2014-02-22 21:28:20 sb"
 
 #  file       SConstruct
 #  copyright  (c) Sebastian Blatt 2013, 2014
@@ -11,7 +11,7 @@
 import os.path
 
 # Import environment exported in calling SConstruct file
-Import('env')
+Import('env', 'using_cxx11')
 
 
 build_directory = 'build/scons/'
@@ -31,7 +31,10 @@ warnings = [
     ]
 
 
-cxxflags = '-g -O3 -std=c++11'
+cxxflags = '-g -O3'
+if using_cxx11:
+  cxxflags += ' -std=c++11'
+
 linkflags = ''
 
 cxxflags += " " + " ".join(map(lambda w: '-W%s' % w, warnings))
@@ -43,9 +46,9 @@ env.Append(LIBPATH = library_directories)
 env.Append(CPPPATH = include_directories)
 env.Append(CXXFLAGS = cxxflags)
 
-env.SConscript('src/SConscript',
-               variant_dir = build_directory + 'sbutil',
-               duplicate = 0,
-               exports = 'env')
+SConscript('src/SConscript',
+           variant_dir = build_directory + 'sbutil',
+           duplicate = 0,
+           exports = 'env')
 
 # SConstruct ends here
