@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-22 09:46:41 sb"
+# Time-stamp: "2014-02-22 19:21:26 sb"
 
 #  file       SConstruct
 #  copyright  (c) Sebastian Blatt 2013, 2014
@@ -10,7 +10,9 @@
 
 import os.path
 
-use_clang = False #True
+# Import environment exported in calling SConstruct file
+Import('env')
+
 
 build_directory = 'build/scons/'
 
@@ -28,13 +30,6 @@ warnings = [
     'all'
     ]
 
-env = Environment()
-
-# switch to clang++
-if use_clang:
-  cc = 'clang'
-  cxx = 'clang++'
-  env.Replace(CC = cc, CXX = cxx)
 
 cxxflags = '-g -O3 -std=c++11'
 linkflags = ''
