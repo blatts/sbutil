@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-23 11:36:18 sb"
+# Time-stamp: "2014-02-23 11:40:48 sb"
 
 #  file       SConscript
 #  copyright  (c) :::author::: :::year:::
@@ -14,7 +14,7 @@ Import('env', 'using_cxx11')
 localenv = env.Clone()
 
 programs = [
-    ':::program:::',
+    ':::project:::',
     ]
 
 build_directory = 'build/scons/'
@@ -60,7 +60,7 @@ localenv.SConscript('sbutil/SConscript',
 
 # Build main program
 localenv.Program(programs[0],
-                 [':::program:::.cc',
+                 [':::project:::.cc',
                   ],
                   LIBS = ['sbutil'])
 
