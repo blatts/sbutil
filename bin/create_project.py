@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-23 11:39:12 sb"
+# Time-stamp: "2014-02-23 11:43:17 sb"
 
 #  file       create_project.py
 #  copyright  (c) Sebastian Blatt 2014
@@ -49,7 +49,8 @@ if __name__ == "__main__":
   replacements = {
     r'project' : project,
     r'today' : time.strftime('%Y%m%d', tm),
-    r'year' : time.strftime('%Y', tm)
+    r'year' : time.strftime('%Y', tm),
+    r'author' : 'Sebastian Blatt'
     }
 
   files = [('main.cc', '%s.cc' % project),
