@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 19:59:04 sb"
+// Time-stamp: "2014-02-22 22:29:24 sb"
 
 /*
   file       PerformanceCounter.cc
@@ -15,7 +15,7 @@ PerformanceCounter::PerformanceCounter()
     counter_start(0)
 {
 
-#ifdef WIN32
+#if SBUTIL_IS_PLATFORM_WINDOWS
 
   LARGE_INTEGER tmp;
   QueryPerformanceFrequency(&tmp);
@@ -36,13 +36,13 @@ PerformanceCounter::PerformanceCounter()
 
   frequency = 1;
   counter_start = time(0);
-#endif //WIN32
+#endif // SBUTIL_IS_PLATFORM_WINDOWS
 
   time_start = time(0);
 }
 
 double PerformanceCounter::GetRelativeTime(){
-#ifdef WIN32
+#if SBUTIL_IS_PLATFORM_WINDOWS
 
   LARGE_INTEGER tmp;
   QueryPerformanceCounter(&tmp);
@@ -56,7 +56,7 @@ double PerformanceCounter::GetRelativeTime(){
 
   return ((double)(time(0) - counter_start)) / frequency;
 
-#endif // WIN32
+#endif // SBUTIL_IS_PLATFORM_WINDOWS
 }
 
 double PerformanceCounter::GetAbsoluteTime(){

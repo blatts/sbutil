@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 20:02:46 sb"
+// Time-stamp: "2014-02-22 22:31:17 sb"
 
 /*
   file       Representable.cc
@@ -8,6 +8,7 @@
  */
 
 #include "Representable.hh"
+#include "Platform.hh"
 
 #include <ctime>
 
@@ -60,7 +61,7 @@ std::ostream& EnglishPluralize::Represent(std::ostream& out) const{
 // over timing information or C++11 std::clock.
 std::ostream& TimeNow::Represent(std::ostream& out) const{
   time_t t = time(0);
-#if WIN32
+#if SBUTIL_IS_PLATFORM_WINDOWS
   struct tm tmp;
   struct tm* p_tmp = &tmp;
   memset(p_tmp, 0, sizeof(struct tm));
@@ -68,7 +69,7 @@ std::ostream& TimeNow::Represent(std::ostream& out) const{
 #else
   struct tm* p_tmp = NULL;
   p_tmp = localtime(&t);
-#endif // WIN32
+#endif // SBUTIL_IS_PLATFORM_WINDOWS
 
   char s[20];
   strftime(s, 20, "%H:%M:%S", p_tmp);

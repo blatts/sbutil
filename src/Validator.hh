@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 14:04:26 sb"
+// Time-stamp: "2014-02-22 22:30:53 sb"
 
 /*
   file       Validator.hh
@@ -16,6 +16,7 @@
 #include <string>
 #include <typeinfo>
 
+#include "Platform.hh"
 #include "Regex.hh"
 
 
@@ -25,10 +26,10 @@
 //
 // #define NOMINMAX does not seem to work, so #undef explicitly
 
-#ifdef WIN32
+#ifdef SBUTIL_IS_PLATFORM_WINDOWS
 #undef min
 #undef max
-#endif
+#endif // SBUTIL_IS_PLATFORM_WINDOWS
 
 
 template <typename T>
