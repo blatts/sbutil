@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-23 11:43:17 sb"
+# Time-stamp: "2014-02-23 11:46:25 sb"
 
 #  file       create_project.py
 #  copyright  (c) Sebastian Blatt 2014
@@ -32,6 +32,10 @@ def copy_replace_template(ifile, ofile, replacements):
     f.write(x)
 
 if __name__ == "__main__":
+  if len(sys.argv) == 1:
+    print "Usage: %s <project_name>" % sys.argv[0]
+    exit(1)
+
   project = sys.argv[1]
 
   print "Make project directory \"%s\"" % project
