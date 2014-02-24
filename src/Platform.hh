@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-22 22:34:55 sb"
+// Time-stamp: "2014-02-23 23:38:32 sb"
 
 /*
   file       Platform.hh
@@ -84,11 +84,6 @@
 #define SBUTIL_IS_PLATFORM_WINDOWS \
   ((SBUTIL_PLATFORM == SBUTIL_PLATFORM_WIN64) ||  \
    (SBUTIL_PLATFORM == SBUTIL_PLATFORM_WIN32))
-
-
-
-
-
 
 
 #endif // PLATFORM_HH__5E8B7EE0_AF6C_43A9_AD57_7151BF624896

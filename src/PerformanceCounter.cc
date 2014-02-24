@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-22 22:29:24 sb"
+// Time-stamp: "2014-02-23 12:00:50 sb"
 
 /*
   file       PerformanceCounter.cc
@@ -9,6 +9,8 @@
 
 
 #include "PerformanceCounter.hh"
+
+#include <cmath>
 
 PerformanceCounter::PerformanceCounter()
   : frequency(0),
@@ -26,19 +28,15 @@ PerformanceCounter::PerformanceCounter()
 
 #else
 
-  // FIXME: This currently punts to time(). Equivalent timing
-  // implementation as on WIN32 needs to be done for DARWIN and
-  // posix platforms! Good reference
+  // Good reference for timing
   //
-  // https://github.com/bittorrent/libutp/blob/master/utp_utils.cpp
-  //
-  // Second option should use new C++11 std::clock stuff.
+  //   https://github.com/bittorrent/libutp/blob/master/utp_utils.cpp
 
-  frequency = 1;
-  counter_start = time(0);
+  frequency = CLOCKS_PER_SEC;
+  counter_start = std::clock();
 #endif // SBUTIL_IS_PLATFORM_WINDOWS
 
-  time_start = time(0);
+  time_start = (unsigned long)time(0);
 }
 
 double PerformanceCounter::GetRelativeTime(){
@@ -50,21 +48,24 @@ double PerformanceCounter::GetRelativeTime(){
 
 #else
 
-  // FIXME: This currently punts to time(). Equivalent timing
-  // implementation as on WIN32 needs to be done for DARWIN and
-  // posix platforms!
-
-  return ((double)(time(0) - counter_start)) / frequency;
+  return ((double)(std::clock() - counter_start)) / frequency;
 
 #endif // SBUTIL_IS_PLATFORM_WINDOWS
 }
 
 double PerformanceCounter::GetAbsoluteTime(){
-  return ((unsigned long)time_start) + GetRelativeTime();
+  double rel = GetRelativeTime();
+  return (double)time_start + rel;
 }
 
-unsigned PerformanceCounter::GetStartTime(){
-  return (unsigned)time_start;
+unsigned long PerformanceCounter::GetAbsoluteTimeRounded(){
+  // Use floor instead of round to ensure that we are never in the future.
+  double rel = floor(GetRelativeTime());
+  return time_start + (unsigned long)rel;
+}
+
+unsigned long PerformanceCounter::GetStartTime(){
+  return (unsigned long)time_start;
 }
 
 // PerformanceCounter.cc ends here
