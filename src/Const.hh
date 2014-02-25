@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-25 17:54:49 sb"
+// Time-stamp: "2014-02-25 18:05:48 sb"
 
 /*
   file       Const.hh
@@ -18,12 +18,13 @@
 namespace Const
 {
   // Fundamental constants
+  extern const double avogadro; // Avogadro number
   extern const double amu; // atomic mass unit
   extern const double c; // speed of light
   extern const double electroncharge; // electron electric charge
   extern const double electronmass; // electron mass
   extern const double h; // Planck's constant
-  extern const doubel G; // gravitational constant
+  extern const double G; // gravitational constant
   extern const double kB; // Boltzmann constant
 
   // Mathematical constants
@@ -37,10 +38,11 @@ namespace Const
   extern const double mu0; // vacuum permeability
 
   // Standard quantities
-  extern const double earth_gravity;
 
+  extern const double standard_gravity;
 
-  // Use what I am used to, but there are a lot of these, see
+  // Use what I am used to, but there are a lot of thermodynamics
+  // conventions, see
   //
   //   https://en.wikipedia.org/wiki/Standard_conditions_for_temperature_and_pressure
   //

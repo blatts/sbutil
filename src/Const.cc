@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-25 17:53:31 sb"
+// Time-stamp: "2014-02-25 17:58:32 sb"
 
 /*
   file       Const.cc
@@ -23,6 +23,8 @@ using namespace Const;
 
 
 const double amu = 1.660538782e-27;
+
+const double avogadro = 6.02214129e+23;
 
 // could have used integer, but avoid confusion and errors by using double
 const double c = 299792458.0;
@@ -82,7 +84,7 @@ const double bohrradius = Const::hbar / Const::electronmass / \
 
 // ---------------------------------------------------------- Standard quantities
 
-const double earth_gravity = 9.81; // m/s^2
+const double standard_gravity = 9.80665; // m/s^2
 
 const double standard_temperature_NIST = 273.15; // K
 
