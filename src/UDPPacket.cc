@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-05-09 19:13:44 sb"
+// Time-stamp: "2014-02-25 16:24:06 sb"
 
 /*
   file       UDPPacket.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 
@@ -11,7 +11,6 @@
 #include "OutputManipulator.hh"
 
 #include <arpa/inet.h>
-#include <netinet/in.h>
 
 UDPPacket::UDPPacket()
   : address(""),

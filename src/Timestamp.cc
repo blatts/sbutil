@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-08-07 14:07:49 sb"
+// Time-stamp: "2014-02-25 16:31:24 sb"
 
 /*
   file       Timestamp.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 

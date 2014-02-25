@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 20:03:39 sb"
+// Time-stamp: "2014-02-25 16:32:02 sb"
 
 /*
   file       ProgressIndicator.cc
@@ -22,8 +22,7 @@ ProgressIndicator::ProgressIndicator()
     current_position(0)
 {}
 
-// FIXME: Timing should be rebased on PerformanceCounter class or
-// C++11 std::clock.
+// FIXME: Rebase this on Timestamp and RelativeTime classes in Timestamp.hh
 class ProgressTime : public Representable {
   public:
     size_t dt;
