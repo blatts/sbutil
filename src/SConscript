@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-22 21:34:20 sb"
+# Time-stamp: "2014-02-25 16:22:07 sb"
 
 #  file       SConscript
 #  copyright  (c) Sebastian Blatt 2013, 2014
@@ -13,10 +13,15 @@ Import('env')
 env.StaticLibrary('sbutil',
                   ['CommandLine.cc',
                    'HDF5File.cc',
+                   'IPUtilities.cc',
                    'PerformanceCounter.cc',
                    'ProgressIndicator.cc',
                    'Representable.cc',
                    'StringVector.cc',
+                   'Timestamp.cc',
+                   'UDPClient.cc',
+                   'UDPPacket.cc',
+                   'UDPServer.cc'
                    ])
 
 # SConscript ends here

@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-21 17:45:42 sb"
+// Time-stamp: "2014-02-25 15:47:34 sb"
 
 /*
   file       OutputManipulator.hh
@@ -252,6 +252,31 @@ class integer_separated_form : public OutputManipulator {
       return out;
     }
 };
+
+// Print double in decimal with highest precision allowed by platform.
+// We would want to do this to ensure that reading back a text file
+// results in the same double precision number. See
+//
+//   https://stackoverflow.com/questions/4643641/best-way-to-output-a-full-precision-double-into-a-text-file
+//
+// Ideally, would use HDF5 to store floating point data in defined
+// binary format.
+//
+class double_full_precision_form : public OutputManipulator {
+  private:
+    const double number;
+  public:
+    double_full_precision_form(const double number_)
+      : number(number_)
+    {}
+
+    std::ostream& output(std::ostream& out) const {
+      out.precision(std::numeric_limits<int>::max());
+      out << number;
+      return out;
+    }
+};
+
 
 
 #endif // OUTPUTMANIPULATOR_HH__F059345E_2A18_4FD8_85C8_5D78AA02D4FE
