@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-01-18 12:53:16 sb"
+// Time-stamp: "2014-02-25 18:09:15 sb"
 
 /*
   file       Rotation.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 
@@ -12,6 +12,7 @@
 
 #include "Exception.hh"
 #include "Rotation.hh"
+#include "Const.hh"
 
 size_t Rotation::DataIndex(size_t row, size_t column) const {
   if(row > 3 || column > 3){
@@ -89,7 +90,7 @@ double Rotation::GetAngle() const {
 
 std::ostream& Rotation::Represent(std::ostream& out) const {
   out << "Angle : " << GetAngle() << " rad = "
-      << 180. / (4.0*atan(1.0)) * GetAngle() << " deg\n";
+      << 180. / Const::pi * GetAngle() << " deg\n";
   for(size_t i=0; i<3; ++i){
     out << ((i==0) ? "/" : ((i==2) ? "\\" : "|")) << "\t";
     for(size_t j=0; j<3; ++j){
