@@ -20,3 +20,4 @@ Potential libraries needed
   * gsl (numerics)
   * gslcblas (numerics)
   * hdf5 (HDF5 files)
+  * libtiff (TIFF files)
