@@ -1,12 +1,9 @@
 /* -*- mode: C++ -*- */
-/* Time-stamp: "2014-02-26 14:12:22 sb" */
+/* Time-stamp: "2014-02-26 14:14:06 sb" */
 
 /*
   file       Tiff.hh
   copyright  (c) Sebastian Blatt 2009 -- 2014
-
-  This file is licensed under the Creative Commons Attribution 3.0
-  Unported License (see http://creativecommons.org/licenses/by/3.0).
 
   Wrapper class to support loading 8 bit and 16 bit grayscale TIFF
   files via libtiff. Load file as respective number of bits, but

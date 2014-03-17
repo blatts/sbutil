@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-01-21 23:41:17 sb"
+// Time-stamp: "2014-03-16 21:21:04 sb"
 
 /*
   file       StringVector.cc
-  copyright  (c) Sebastian Blatt 2011, 2012
+  copyright  (c) Sebastian Blatt 2011, 2012, 2013, 2014
 
  */
 

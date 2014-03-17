@@ -1,12 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-26 14:12:36 sb"
+// Time-stamp: "2014-02-26 14:13:54 sb"
 
 /*
   file       VariableBuffer.hh
   copyright  (c) Sebastian Blatt 2009 -- 2014
-
-  This file is licensed under the Creative Commons Attribution 3.0
-  Unported License (see http://creativecommons.org/licenses/by/3.0).
 
  */
 
