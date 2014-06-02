@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-25 17:58:32 sb"
+// Time-stamp: "2014-06-02 11:56:13 sb"
 
 /*
   file       Const.cc
@@ -13,7 +13,13 @@
 
 #define SQR(x) ((x)*(x))
 
-using namespace Const;
+
+// This does not work under the newest XCode. What crap! Have to write
+// Const:: everywhere instead of simply doing using namespace. Went
+// back to using a macro instead.
+
+//  using namespace Const;
+#define DEFINE_CONST(NAME, VALUE) const double Const::NAME = (VALUE)
 
 // -------------------------------------------------------- Fundamental constants
 
@@ -22,28 +28,28 @@ using namespace Const;
 //   https://futureboy.us/frinkdocs/
 
 
-const double amu = 1.660538782e-27;
+DEFINE_CONST(amu, 1.660538782e-27);
 
-const double avogadro = 6.02214129e+23;
+DEFINE_CONST(avogadro, 6.02214129e+23);
 
 // could have used integer, but avoid confusion and errors by using double
-const double c = 299792458.0;
+DEFINE_CONST(c, 299792458.0);
 
-const double electroncharge = 1.602176565e-19;
+DEFINE_CONST(electroncharge, 1.602176565e-19);
 
-const double electronmass = 9.10938291e-31;
+DEFINE_CONST(electronmass, 9.10938291e-31);
 
-const double h = 6.62606896e-34;
+DEFINE_CONST(h, 6.62606896e-34);
 
-const double G = 6.67384e-11;
+DEFINE_CONST(G, 6.67384e-11);
 
-const double kB = 1.3806503207853104e-23;
+DEFINE_CONST(kB, 1.3806503207853104e-23);
 
 // ------------------------------------------------------- Mathematical constants
 
 // Pi to machine precision can be calculated easily as
 //
-//   const double pi = 4.0 * atan(1.0);
+//   DEFINE_CONST(pi, 4.0 * atan(1.0));
 //
 // For compatibility with math.h, use the macro definition from the
 // header here. If desired, add more values as needed.
@@ -62,33 +68,33 @@ const double kB = 1.3806503207853104e-23;
 // #define M_SQRT2     1.41421356237309504880168872420969808   /* sqrt(2) */
 // #define M_SQRT1_2   0.707106781186547524400844362104849039  /* 1/sqrt(2) */
 
-const double pi = M_PI;
+DEFINE_CONST(pi, M_PI);
 
 // ----------------------------------------------------------- Derived quantities
 
 // Derived quantities
 
-const double mu0 = 4.0e-7 * Const::pi;
+DEFINE_CONST(mu0, 4.0e-7 * Const::pi);
 
-const double epsilon0 = 1.0 / (Const::mu0) / SQR(Const::c);
+DEFINE_CONST(epsilon0, 1.0 / (Const::mu0) / SQR(Const::c));
 
-const double alpha = 0.25 / (Const::pi * Const::epsilon0) * \
-                     SQR(Const::electroncharge) / \
-                     (Const::hbar * Const::c);
+DEFINE_CONST(alpha, 0.25 / (Const::pi * Const::epsilon0) * \
+             SQR(Const::electroncharge) /                  \
+             (Const::hbar * Const::c));
 
-const double hbar = Const::h/(2.0 * Const::pi);
+DEFINE_CONST(hbar, Const::h/(2.0 * Const::pi));
 
-const double bohrradius = Const::hbar / Const::electronmass / \
-                          Const::c / Const::alpha;
+DEFINE_CONST(bohrradius, Const::hbar / Const::electronmass / \
+             Const::c / Const::alpha);
 
 
 // ---------------------------------------------------------- Standard quantities
 
-const double standard_gravity = 9.80665; // m/s^2
+DEFINE_CONST(standard_gravity, 9.80665); // m/s^2
 
-const double standard_temperature_NIST = 273.15; // K
+DEFINE_CONST(standard_temperature_NIST, 273.15); // K
 
-const double standard_pressure_NIST = 101325; // Pa
+DEFINE_CONST(standard_pressure_NIST, 101325); // Pa
 
 
 
