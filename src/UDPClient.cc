@@ -1,11 +1,13 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-05-09 16:09:51 sb"
+// Time-stamp: "2014-06-02 10:29:20 sb"
 
 /*
   file       UDPClient.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
+
+#include "Platform.hh"
 
 #include <sstream>
 #include <iomanip>
@@ -15,6 +17,10 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+
+#if (SB_UTIL_PLATFORM == SB_UTIL_PLATFORM_OSX)
+#include <unistd.h>
+#endif
 
 #include "Exception.hh"
 #include "UDPClient.hh"

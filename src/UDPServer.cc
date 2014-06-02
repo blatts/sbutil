@@ -1,11 +1,13 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-08-13 17:21:41 sb"
+// Time-stamp: "2014-06-02 10:28:32 sb"
 
 /*
   file       UDPServer.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
+
+#include "Platform.hh"
 
 #include <iostream>
 #include <sstream>
@@ -16,6 +18,10 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+
+#if (SB_UTIL_PLATFORM == SB_UTIL_PLATFORM_OSX)
+#include <unistd.h>
+#endif
 
 #include "UDPServer.hh"
 #include "Exception.hh"

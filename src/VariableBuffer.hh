@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-26 14:13:54 sb"
+// Time-stamp: "2014-06-02 10:25:31 sb"
 
 /*
   file       VariableBuffer.hh
@@ -32,7 +32,7 @@ class VariableBuffer {
     const void* const_expose() const {return static_cast<void*>(data);}
     unsigned char* get(size_t i) const {return &(data[i*chunk]);}
     const unsigned char* const_get(size_t i) const {return &(data[i*chunk]);}
-    const size_t get_chunk() const {return chunk;}
+    size_t get_chunk() const {return chunk;}
   private:
     unsigned char* data;
     size_t chunk;

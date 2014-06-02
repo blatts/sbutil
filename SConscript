@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-22 21:41:01 sb"
+# Time-stamp: "2014-06-02 10:24:01 sb"
 
 #  file       SConscript
 #  copyright  (c) Sebastian Blatt 2013, 2014
@@ -18,7 +18,6 @@ localenv = env.Clone()
 build_directory = 'build/scons/'
 
 include_directories = [
-    '/sw/include',
     ]
 
 library_directories = [
