@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-23 11:40:48 sb"
+# Time-stamp: "2014-10-12 12:56:45 sb"
 
 #  file       SConscript
 #  copyright  (c) :::author::: :::year:::
@@ -20,14 +20,16 @@ programs = [
 build_directory = 'build/scons/'
 
 include_directories = [
-    '/sw/include',
     os.path.realpath('sbutil/src')
     ]
 
 library_directories = [
-    '/sw/lib',
     os.path.realpath('sbutil/build/scons/sbutil')
     ]
+
+if os.path.isdir('/sw'):
+  include_directories = ['/sw/include',] + include_directories
+  library_directories = ['/sw/lib',] + library_directories
 
 frameworks = []
 
