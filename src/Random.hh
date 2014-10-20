@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2013-02-04 20:41:25 sb"
+// Time-stamp: "2014-10-15 01:28:19 sb"
 
 /*
   file       Random.hh
-  copyright  (c) Sebastian Blatt 2012, 2013
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 

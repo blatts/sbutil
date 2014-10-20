@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-02-14 11:56:20 sb"
+// Time-stamp: "2014-10-20 14:55:54 sb"
 
 /*
   file       UDPClient.hh
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 
@@ -20,7 +20,6 @@ class UDPClient {
     std::string server_address;
     unsigned short server_port;
     struct sockaddr_in server_socket_address;
-    uint32_t client_address; // resolved local address of client
 
   public:
     UDPClient(const std::string& server_address_,

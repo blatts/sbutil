@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2013-02-04 20:43:27 sb"
+// Time-stamp: "2014-10-15 01:19:09 sb"
 
 /*
   file       Random.cc
-  copyright  (c) Sebastian Blatt 2012, 2013
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
  */
 
@@ -53,7 +53,7 @@ double Random::Uniform(double lo, double hi){
 }
 
 double Random::Normal(double sigma, double mu){
-  return gsl_ran_gaussian(rng->p, sigma) + mu;
+  return gsl_ran_gaussian_ziggurat(rng->p, sigma) + mu;
 }
 
 Point Random::UniformOnSphericalSurface(double radius){

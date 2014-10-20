@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-06-02 10:29:20 sb"
+// Time-stamp: "2014-10-20 14:58:04 sb"
 
 /*
   file       UDPClient.cc
@@ -18,7 +18,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#if (SB_UTIL_PLATFORM == SB_UTIL_PLATFORM_OSX)
+#if SBUTIL_IS_PLATFORM_OSX
 #include <unistd.h>
 #endif
 
@@ -30,8 +30,7 @@ UDPClient::UDPClient(const std::string& server_address_,
                        unsigned short server_port_)
   : fd_socket(0),
     server_address(server_address_),
-    server_port(server_port_),
-    client_address(0)
+    server_port(server_port_)
 {
   memset(&server_socket_address, 0, sizeof(server_socket_address));
   OpenSocket();

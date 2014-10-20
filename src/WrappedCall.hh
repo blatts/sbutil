@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-10-26 12:34:22 sb"
+// Time-stamp: "2014-10-15 14:31:12 sb"
 
 /*
   file       WrappedCall.hh
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
   Defines a convenience macro
 
@@ -24,6 +24,9 @@
 
   Otherwise the header will default to using a pure macro based
   version and will emit a compiler warning.
+
+  Main difference: the macro will not return the validated return
+  value from applying the wrapped function!
 
  */
 

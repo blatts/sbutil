@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-22 22:30:53 sb"
+// Time-stamp: "2014-10-15 14:35:04 sb"
 
 /*
   file       Validator.hh
@@ -223,6 +223,19 @@ class ValidatorNonnegative : public Validator<T> {
       return out;
     }
 };
+
+// validate any type of T* != NULL
+template <typename T>
+class ValidatorNonNull : public Validator<T> {
+  public:
+    bool Validate(const T* x) const {return x != NULL;}
+    std::ostream& InvalidMessage(const T* x, std::ostream& out) const {
+      const std::string n = typeid(T).name();
+      out << n << " (" << x << " != NULL) returned false.";
+      return out;
+    }
+};
+
 
 
 #endif // VALIDATOR_HH__B4757EC6_AF20_46F8_A030_98B6BF560EDE
