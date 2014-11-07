@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-10-15 01:19:09 sb"
+// Time-stamp: "2014-11-07 16:24:44 sb"
 
 /*
   file       Random.cc
@@ -9,6 +9,7 @@
 
 #include "Random.hh"
 #include "Rotation.hh"
+#include "OutputManipulator.hh"
 
 #include <cmath>
 #include <ctime>
@@ -117,15 +118,47 @@ DiscreteDistribution::DiscreteDistribution(Random& rnd_,
 }
 
 size_t DiscreteDistribution::GetRandomStep() {
-  const size_t jmax = cdf.size() - 1;
-  const double x = rnd.Uniform(cdf[0], cdf[jmax]);
-  for(size_t j=1; j<jmax; ++j){
+  const size_t jmax = cdf.size();
+  const double x = rnd.Uniform(); // cdf is normalized!
+  for(size_t j=0; j<jmax; ++j){
     if(cdf[j] >= x){
       return j;
     }
   }
   // should not get here
   return jmax;
+}
+
+std::ostream& DiscreteDistribution::Represent(std::ostream& out) const {
+  out << "pdf : " << vector_form<double>(pdf) << "\n"
+      << "cdf : " << vector_form<double>(cdf);
+  return out;
+}
+
+void Test__DiscreteDistribution(){
+  std::vector<double> probs;
+  probs.push_back(0.20);
+  probs.push_back(0.33);
+  probs.push_back(0.47);
+
+  Random rnd;
+  rnd.SeedWithTimeNull();
+
+  DiscreteDistribution P(rnd, probs);
+  std::vector<int> hist(P.Size(), 0);
+  const size_t N = 1000000;
+  for(size_t i=0; i<N; ++i){
+    size_t m = P.GetRandomStep();
+    ++(hist[m]);
+  }
+
+  std::cout << vector_form<int>(hist) << std::endl;
+
+  std::vector<double> percentages(3, 0.0);
+  for(size_t i=0; i<percentages.size(); ++i){
+    percentages[i] = 100.0 * (double)hist[i] / N;
+  }
+  std::cout << vector_form<double>(percentages) << std::endl;
 }
 
 

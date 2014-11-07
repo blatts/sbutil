@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-10-15 01:28:19 sb"
+// Time-stamp: "2014-11-07 16:24:38 sb"
 
 /*
   file       Random.hh
@@ -12,6 +12,7 @@
 #define RANDOM_HH__B0F37B3C_5E4D_4D3E_A97A_C2353945BAB6
 
 #include "Point.hh"
+#include "Representable.hh"
 #include <vector>
 
 // use pimpl to hide random number generator interna
@@ -32,7 +33,7 @@ class Random {
     Point CosOnHalfsphereAround(const Point& normal);
 };
 
-class DiscreteDistribution {
+class DiscreteDistribution : public Representable {
   private:
     Random& rnd;
     std::vector<double> pdf;
@@ -40,7 +41,11 @@ class DiscreteDistribution {
   public:
     DiscreteDistribution(Random& rnd_, std::vector<double>& probabilities_);
     size_t GetRandomStep();
+    size_t Size() const {return pdf.size();}
+    std::ostream& Represent(std::ostream& out) const;
 };
+
+void Test__DiscreteDistribution();
 
 
 #endif // RANDOM_HH__B0F37B3C_5E4D_4D3E_A97A_C2353945BAB6
