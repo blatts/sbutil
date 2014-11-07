@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-25 15:47:34 sb"
+// Time-stamp: "2014-10-21 13:40:05 sb"
 
 /*
   file       OutputManipulator.hh
