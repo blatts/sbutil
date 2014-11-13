@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-25 16:31:24 sb"
+// Time-stamp: "2014-11-13 14:31:49 sb"
 
 /*
   file       Timestamp.cc
@@ -42,6 +42,32 @@ std::ostream& Timestamp::Represent(std::ostream& out) const {
   }
   return out;
 }
+
+
+/* FIXME: Deprecated, moved from Representable.cc
+
+// FIXME: This should be rebased on PerformanceCounter abstraction
+// over timing information or C++11 std::clock.
+
+std::ostream& TimeNow::Represent(std::ostream& out) const{
+  time_t t = time(0);
+#if SBUTIL_IS_PLATFORM_WINDOWS
+  struct tm tmp;
+  struct tm* p_tmp = &tmp;
+  memset(p_tmp, 0, sizeof(struct tm));
+  errno_t e = localtime_s(p_tmp, &t);
+#else
+  struct tm* p_tmp = NULL;
+  p_tmp = localtime(&t);
+#endif // SBUTIL_IS_PLATFORM_WINDOWS
+
+  char s[20];
+  strftime(s, 20, "%H:%M:%S", p_tmp);
+  out << s;
+  return out;
+}
+
+*/
 
 void Timestamp::Now() {
   struct timeval t;
@@ -115,6 +141,7 @@ Timestamp operator+(const Timestamp& a, const RelativeTime& b) {
   double s = floor(dt);
   return Timestamp(a.GetSeconds() + s, (dt - s) * 1e6);
 }
+
 
 
 // Timestamp.cc ends here

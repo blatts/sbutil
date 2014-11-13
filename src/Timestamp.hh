@@ -1,9 +1,12 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-08-07 14:08:35 sb"
+// Time-stamp: "2014-11-13 14:34:15 sb"
 
 /*
   file       Timestamp.hh
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+
+  TODO: Check out new C++11 <chrono> library. Is it general enough to
+  use here?
 
  */
 
@@ -77,6 +80,17 @@ RelativeTime operator-(const Timestamp& a, const Timestamp& b);
 Timestamp operator+(const Timestamp& a, const RelativeTime& b);
 inline Timestamp operator+(const RelativeTime& a, const Timestamp& b) {return b + a;}
 
+
+/*
+
+  FIXME: Deprecated, moved from Representable.hh to here.
+
+class TimeNow : public Representable {
+  public:
+    TimeNow() {}
+    std::ostream& Represent(std::ostream& out) const;
+};
+*/
 
 
 #endif // TIMESTAMP_HH__54390E81_90BF_4071_BA85_38D20483C9A5

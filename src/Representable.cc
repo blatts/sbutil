@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-22 22:31:17 sb"
+// Time-stamp: "2014-11-13 14:30:12 sb"
 
 /*
   file       Representable.cc
@@ -54,26 +54,6 @@ std::ostream& EnglishPluralize::Represent(std::ostream& out) const{
   if(m == 0 || m >= 2){
     out << "s";
   }
-  return out;
-}
-
-// FIXME: This should be rebased on PerformanceCounter abstraction
-// over timing information or C++11 std::clock.
-std::ostream& TimeNow::Represent(std::ostream& out) const{
-  time_t t = time(0);
-#if SBUTIL_IS_PLATFORM_WINDOWS
-  struct tm tmp;
-  struct tm* p_tmp = &tmp;
-  memset(p_tmp, 0, sizeof(struct tm));
-  errno_t e = localtime_s(p_tmp, &t);
-#else
-  struct tm* p_tmp = NULL;
-  p_tmp = localtime(&t);
-#endif // SBUTIL_IS_PLATFORM_WINDOWS
-
-  char s[20];
-  strftime(s, 20, "%H:%M:%S", p_tmp);
-  out << s;
   return out;
 }
 

@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-01-10 23:55:43 sb"
+// Time-stamp: "2014-11-13 14:36:02 sb"
 
 /*
   file       Representable.hh
-  copyright  (c) Sebastian Blatt 2011, 2012
+  copyright  (c) Sebastian Blatt 2011, 2012, 2013, 2014
 
  */
 
@@ -69,12 +69,6 @@ class EnglishPluralize : public Representable{
     const size_t m;
   public:
     EnglishPluralize(const Representable& s_, size_t m_) : s(s_), m(m_){}
-    std::ostream& Represent(std::ostream& out) const;
-};
-
-class TimeNow : public Representable {
-  public:
-    TimeNow() {}
     std::ostream& Represent(std::ostream& out) const;
 };
 

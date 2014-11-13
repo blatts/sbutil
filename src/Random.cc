@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 11:51:59 sb"
+// Time-stamp: "2014-11-13 11:59:56 sb"
 
 /*
   file       Random.cc
@@ -148,10 +148,7 @@ std::ostream& DiscreteDistribution::Represent(std::ostream& out) const {
 }
 
 void Test__DiscreteDistribution(){
-  std::vector<double> probs;
-  probs.push_back(0.20);
-  probs.push_back(0.33);
-  probs.push_back(0.47);
+  std::vector<double> probs({0.20, 0.33, 0.47});
 
   Random rnd;
   rnd.SeedWithTimeNull();
@@ -166,10 +163,10 @@ void Test__DiscreteDistribution(){
 
   std::cout << vector_form<int>(hist) << std::endl;
 
-  std::vector<double> percentages(3, 0.0);
-  for(size_t i=0; i<percentages.size(); ++i){
-    percentages[i] = 100.0 * (double)hist[i] / N;
-  }
+  std::vector<double> percentages;
+  copy(percentages, hist);
+  scale(percentages, 100.0 / N);
+
   std::cout << vector_form<double>(percentages) << std::endl;
 }
 

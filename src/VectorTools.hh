@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 11:50:38 sb"
+// Time-stamp: "2014-11-13 11:59:01 sb"
 
 /*
   file       VectorTools.hh
@@ -104,14 +104,13 @@ inline const std::vector<T>& appendto(std::vector<T>& v, const std::vector<T>& w
   return v;
 }
 
-template <typename T>
-inline std::vector<T>& copy(std::vector<T>& dst, const std::vector<T>& src){
+// Copy full vector<A> <- vector<B> using default casting between A <- B
+template <typename A, typename B>
+inline std::vector<A>& copy(std::vector<A>& dst, const std::vector<B>& src){
   dst.resize(src.size());
   std::copy(src.begin(), src.end(), dst.begin());
   return dst;
 }
-
-
 
 
 #endif // VECTORTOOLS_HH__F8B8D66C_EA68_11E3_8491_283737241892
