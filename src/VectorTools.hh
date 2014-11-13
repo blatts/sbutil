@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 09:44:44 sb"
+// Time-stamp: "2014-11-13 09:58:10 sb"
 
 /*
   file       VectorTools.hh
@@ -7,7 +7,9 @@
 
   Convenience functions to work with std::vector<T> with numeric types
   T. Use this mostly as a shallow convenience wrapper around standard
-  library functions.
+  library functions. Main use of most of these is to avoid having to
+  write v.begin(), v.end() all over the place and provide Matlab-style
+  names.
 
   Could have used functors and std::generate, but simple loops seem
   more transparent in some cases.
@@ -22,6 +24,7 @@
 #include <cmath>
 #include <numeric>
 #include <functional>
+#include <algorithm>
 
 template <typename T>
 T sqr(const T& t){
@@ -65,9 +68,16 @@ T dot(const std::vector<T>& v, const std::vector<T>& w){
                             static_cast<T>(0));
 }
 
+template <typename T, typename UnaryOperation>
+const std::vector<T>& apply(std::vector<T>& v, UnaryOperation op){
+  std::transform(v.begin(), v.end(), v.begin(), op);
+  return v;
+}
 
 template <typename T>
 const std::vector<T>& scale(std::vector<T>& v, const T scale){
+  // Avoid using std::transform, std::bind2nd and std::multiplies functors
+  // for such a simple operation.
   const size_t N = v.size();
   for(size_t i=0; i<N; ++i){
     v[i] *= scale;
@@ -93,7 +103,6 @@ inline const std::vector<T>& appendto(std::vector<T>& v, const std::vector<T>& w
   std::copy(w.begin(), w.end(), std::back_insert_iterator< std::vector<T> >(v));
   return v;
 }
-
 
 
 
