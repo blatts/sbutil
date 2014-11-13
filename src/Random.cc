@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 10:55:34 sb"
+// Time-stamp: "2014-11-13 11:47:00 sb"
 
 /*
   file       Random.cc
@@ -10,6 +10,7 @@
 #include "Random.hh"
 #include "Rotation.hh"
 #include "OutputManipulator.hh"
+#include "VectorTools.hh"
 
 #include <cmath>
 #include <ctime>
@@ -118,13 +119,8 @@ DiscreteDistribution::DiscreteDistribution(Random& rnd_,
 {
   // normalize probabilities to make sure
   std::copy(probabilities_.begin(), probabilities_.end(), pdf.begin());
-  double ptot = 0.0;
-  for(size_t i=0; i<pdf.size(); ++i){
-    ptot += pdf[i];
-  }
-  for(size_t i=0; i<pdf.size(); ++i){
-    pdf[i] /= ptot;
-  }
+  normalize_to_total(pdf);
+
   // integrate pdf -> cdf
   std::copy(pdf.begin(), pdf.end(), cdf.begin());
   for(size_t i=1; i<cdf.size(); ++i){
@@ -135,13 +131,14 @@ DiscreteDistribution::DiscreteDistribution(Random& rnd_,
 size_t DiscreteDistribution::GetRandomStep() {
   const size_t jmax = cdf.size();
   const double x = rnd.Uniform(); // cdf is normalized!
+  size_t rc = 0;
   for(size_t j=0; j<jmax; ++j){
     if(cdf[j] >= x){
-      return j;
+      rc = j;
+      break;
     }
   }
-  // should not get here
-  return jmax;
+  return rc;
 }
 
 std::ostream& DiscreteDistribution::Represent(std::ostream& out) const {

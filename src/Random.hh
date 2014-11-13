@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 10:55:06 sb"
+// Time-stamp: "2014-11-13 11:46:15 sb"
 
 /*
   file       Random.hh
@@ -37,6 +37,11 @@ class Random {
     Point CosOnHalfsphereAround(const Point& normal);
 };
 
+/*
+  Given a vector of probabilities (does not need to be normalized),
+  return a random step distributed accordingly.
+
+ */
 class DiscreteDistribution : public Representable {
   private:
     Random& rnd;
