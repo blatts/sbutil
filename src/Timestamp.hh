@@ -1,12 +1,12 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 14:34:15 sb"
+// Time-stamp: "2014-11-13 14:58:31 sb"
 
 /*
   file       Timestamp.hh
   copyright  (c) Sebastian Blatt 2012, 2013, 2014
 
   TODO: Check out new C++11 <chrono> library. Is it general enough to
-  use here?
+  use here? May also want to combine this file with PerformanceCounter.hh.
 
  */
 
@@ -24,7 +24,7 @@ class Timestamp : public Representable {
     uint32_t stamp;
     uint32_t microseconds;
   public:
-    Timestamp();
+    Timestamp(); // Defaults to calling Now()
     Timestamp(uint32_t stamp_, uint32_t microseconds_) { Set(stamp_, microseconds_);}
     Timestamp(const Timestamp& x) : Representable() {Set(x);}
     const Timestamp& operator=(const Timestamp& x){
@@ -32,13 +32,20 @@ class Timestamp : public Representable {
       return *this;
     }
 
+    // based on localtime_r(3)
     std::ostream& Represent(std::ostream& out) const;
+
+    // based on gettimeofday(2)
     void Now();
+
+    // based on localtime_r(3)
     void At(int year, int month, int day,
             int hour, int minute, int second,
             int msecond, int usecond);
+
     uint32_t GetSeconds() const {return stamp;}
     uint32_t GetMicroSeconds() const {return microseconds;}
+
     void Set(uint32_t stamp_, uint32_t microseconds_){
       stamp = stamp_;
       microseconds = microseconds_;
@@ -62,6 +69,8 @@ class RelativeTime : public Representable {
     }
 
     std::ostream& Represent(std::ostream& out) const;
+    std::ostream& RepresentPretty(std::ostream& out) const;
+
     double Get() const {return offset;}
     void Set(double offset_) {offset = offset_;}
     void Set(const RelativeTime& x) {offset = x.Get();}

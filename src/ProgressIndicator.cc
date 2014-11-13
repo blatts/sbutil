@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-25 16:32:02 sb"
+// Time-stamp: "2014-11-13 15:13:34 sb"
 
 /*
   file       ProgressIndicator.cc
@@ -9,21 +9,13 @@
 
 #include "ProgressIndicator.hh"
 #include "OutputManipulator.hh"
-#include "Representable.hh"
 
 #include <sstream>
 #include <string>
-#include <ctime>
 
-ProgressIndicator::ProgressIndicator()
-  : line_width(50),
-    percent_width(6),
-    start_time(0),
-    current_position(0)
-{}
 
 // FIXME: Rebase this on Timestamp and RelativeTime classes in Timestamp.hh
-class ProgressTime : public Representable {
+/*class ProgressTime : public Representable {
   public:
     size_t dt;
     size_t seconds;
@@ -48,12 +40,21 @@ class ProgressTime : public Representable {
       return out;
     }
 };
+*/
+
+
+ProgressIndicator::ProgressIndicator()
+  : line_width(50),
+    percent_width(6),
+    start_time(),
+    current_position(0)
+{}
 
 
 std::ostream& ProgressIndicator::Show(std::ostream& out, size_t i, size_t N) {
   if(i == 0){
     current_position = 0;
-    start_time = time(0);
+    start_time.Now();
   }
 
   double p = ((double)(i+1))/((double)N);
@@ -68,8 +69,13 @@ std::ostream& ProgressIndicator::Show(std::ostream& out, size_t i, size_t N) {
   }
 
   if(i == N - 1){
+    RelativeTime dt = Timestamp() - start_time;
+
     std::ostringstream os;
-    os << "  calculation took " << ProgressTime(start_time) << ".";
+    os << "  calculation took ";
+    dt.RepresentPretty(os);
+    os << ".";
+
     out << '\r' << os.str();
     size_t l = os.str().size();
     if(l < line_width + percent_width){

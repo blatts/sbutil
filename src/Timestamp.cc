@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 14:31:49 sb"
+// Time-stamp: "2014-11-13 15:25:21 sb"
 
 /*
   file       Timestamp.cc
@@ -8,6 +8,7 @@
  */
 
 
+#include <cassert>
 #include <cstring>
 #include <cerrno>
 #include <cmath>
@@ -129,6 +130,44 @@ std::ostream& RelativeTime::Represent(std::ostream& out) const {
   out << offset;
   return out;
 }
+
+std::ostream& RelativeTime::RepresentPretty(std::ostream& out) const {
+  static double intervals[] = {
+    24.0 * 60.0 * 60.0,
+    60.0 * 60.0,
+    60.0,
+    1.0,
+    1e-3,
+    1e-6};
+
+  double dt_seconds = offset;
+  assert(dt_seconds > 0);
+
+  bool printing_yet = false;
+  const size_t imax = sizeof(intervals)/sizeof(intervals[0]);
+  for(size_t i=0; i<imax; ++i){
+    size_t x = static_cast<size_t>(floor(dt_seconds / intervals[i]));
+    dt_seconds -= x * intervals[i];
+
+    if(!printing_yet && x == 0){
+      continue;
+    }
+    printing_yet = true;
+
+    if(i == 0){
+      out << static_cast<int>(x) << ":";
+    }
+    else if(i < 4){
+      out << right_justified<size_t>(x, 2, '0') << ":";
+    }
+    else{
+      out << right_justified<size_t>(x, 3, '0')
+          << ((i < (imax - 1)) ? "." : "");
+    }
+  }
+  return out;
+}
+
 
 RelativeTime operator-(const Timestamp& a, const Timestamp& b){
   double s = ((double)a.GetSeconds()) - ((double)b.GetSeconds());
