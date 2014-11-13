@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 14:48:56 sb"
+// Time-stamp: "2014-11-13 15:35:10 sb"
 
 /*
   file       ProgressIndicator.hh
@@ -26,7 +26,7 @@ class ProgressIndicator {
 
     // Emits '\r' to update progress bar. If OUT is not a terminal
     // capable of handling carriage return correctly, this will
-    // produce a lot of lines.
+    // produce a new line for each call.
     std::ostream& Show(std::ostream& out, size_t i, size_t N);
 };
 

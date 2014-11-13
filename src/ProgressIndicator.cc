@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 15:13:34 sb"
+// Time-stamp: "2014-11-13 15:28:51 sb"
 
 /*
   file       ProgressIndicator.cc
@@ -12,35 +12,6 @@
 
 #include <sstream>
 #include <string>
-
-
-// FIXME: Rebase this on Timestamp and RelativeTime classes in Timestamp.hh
-/*class ProgressTime : public Representable {
-  public:
-    size_t dt;
-    size_t seconds;
-    size_t minutes;
-    size_t hours;
-
-    ProgressTime(size_t start_time){
-      dt = (size_t)(time(0) - start_time);
-      seconds = dt;
-      hours = seconds / (3600);
-      seconds -= hours * 3600;
-      minutes = seconds / 60;
-      seconds -= minutes * 60;
-    }
-
-    std::ostream& Represent(std::ostream& out) const {
-      if(hours > 0){
-        out << right_justified<size_t>(hours, 2, '0') << ":";
-      }
-      out << right_justified<size_t>(minutes, 2, '0') << ":"
-          << right_justified<size_t>(seconds, 2, '0');
-      return out;
-    }
-};
-*/
 
 
 ProgressIndicator::ProgressIndicator()
