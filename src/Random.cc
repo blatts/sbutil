@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 11:47:00 sb"
+// Time-stamp: "2014-11-13 11:51:59 sb"
 
 /*
   file       Random.cc
@@ -118,11 +118,11 @@ DiscreteDistribution::DiscreteDistribution(Random& rnd_,
     cdf(probabilities_.size(), 0.0)
 {
   // normalize probabilities to make sure
-  std::copy(probabilities_.begin(), probabilities_.end(), pdf.begin());
-  normalize_to_total(pdf);
+  copy(pdf, probabilities_);
+  normalize_by_total(pdf);
 
   // integrate pdf -> cdf
-  std::copy(pdf.begin(), pdf.end(), cdf.begin());
+  copy(cdf, pdf);
   for(size_t i=1; i<cdf.size(); ++i){
     cdf[i] += cdf[i-1];
   }

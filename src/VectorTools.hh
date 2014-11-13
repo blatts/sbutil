@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 09:58:10 sb"
+// Time-stamp: "2014-11-13 11:50:38 sb"
 
 /*
   file       VectorTools.hh
@@ -27,7 +27,7 @@
 #include <algorithm>
 
 template <typename T>
-T sqr(const T& t){
+inline T sqr(const T& t){
   return t * t;
 }
 
@@ -52,30 +52,30 @@ void range(const T a, const T b, const T delta, std::vector<T>& result){
 }
 
 template <typename T>
-T total(const std::vector<T>& v){
+inline T total(const std::vector<T>& v){
   return std::accumulate(v.begin(), v.end(), static_cast<T>(0));
 }
 
 template <typename T>
-T product(const std::vector<T>& v){
+inline T product(const std::vector<T>& v){
   return std::accumulate(v.begin(), v.end(),
                          static_cast<T>(1), std::multiplies<T>());
 }
 
 template <typename T>
-T dot(const std::vector<T>& v, const std::vector<T>& w){
+inline T dot(const std::vector<T>& v, const std::vector<T>& w){
   return std::inner_product(v.begin(), v.end(), w.begin(),
                             static_cast<T>(0));
 }
 
 template <typename T, typename UnaryOperation>
-const std::vector<T>& apply(std::vector<T>& v, UnaryOperation op){
+inline const std::vector<T>& apply(std::vector<T>& v, UnaryOperation op){
   std::transform(v.begin(), v.end(), v.begin(), op);
   return v;
 }
 
 template <typename T>
-const std::vector<T>& scale(std::vector<T>& v, const T scale){
+inline const std::vector<T>& scale(std::vector<T>& v, const T scale){
   // Avoid using std::transform, std::bind2nd and std::multiplies functors
   // for such a simple operation.
   const size_t N = v.size();
@@ -86,13 +86,13 @@ const std::vector<T>& scale(std::vector<T>& v, const T scale){
 }
 
 template <typename T>
-void normalize_by_total(std::vector<T>& v){
+inline void normalize_by_total(std::vector<T>& v){
   const T t = 1.0 / total(v);
   scale(v, t);
 }
 
 template <typename T>
-void normalize(std::vector<T>& v){
+inline void normalize(std::vector<T>& v){
   T t = dot(v, v);
   scale(v, 1.0 / sqrt(t));
 }
@@ -103,6 +103,14 @@ inline const std::vector<T>& appendto(std::vector<T>& v, const std::vector<T>& w
   std::copy(w.begin(), w.end(), std::back_insert_iterator< std::vector<T> >(v));
   return v;
 }
+
+template <typename T>
+inline std::vector<T>& copy(std::vector<T>& dst, const std::vector<T>& src){
+  dst.resize(src.size());
+  std::copy(src.begin(), src.end(), dst.begin());
+  return dst;
+}
+
 
 
 
