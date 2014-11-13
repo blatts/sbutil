@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-07 16:24:44 sb"
+// Time-stamp: "2014-11-13 10:55:34 sb"
 
 /*
   file       Random.cc
@@ -56,6 +56,21 @@ double Random::Uniform(double lo, double hi){
 double Random::Normal(double sigma, double mu){
   return gsl_ran_gaussian_ziggurat(rng->p, sigma) + mu;
 }
+
+double Random::Exponential(double mu){
+  return gsl_ran_exponential(rng->p, mu);
+}
+
+size_t Random::Poisson(double mu){
+  return gsl_ran_poisson(rng->p, mu);
+}
+
+double Random::StudentT(double nu){
+  return gsl_ran_tdist(rng->p, nu);
+}
+
+
+
 
 Point Random::UniformOnSphericalSurface(double radius){
   double t = 0.0;

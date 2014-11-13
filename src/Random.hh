@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-07 16:24:38 sb"
+// Time-stamp: "2014-11-13 10:55:06 sb"
 
 /*
   file       Random.hh
@@ -28,6 +28,10 @@ class Random {
 
     double Uniform(double lo = 0.0, double hi = 1.0);
     double Normal(double sigma = 1.0, double mu = 0.0);
+    double Exponential(double mu = 1.0);
+    size_t Poisson(double mu = 1.0);
+    double StudentT(double nu = 1.0);
+
     Point UniformOnSphericalSurface(double radius = 1.0);
     Point UniformOnHalfsphereAround(const Point& normal);
     Point CosOnHalfsphereAround(const Point& normal);
