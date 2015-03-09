@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-10-21 13:40:05 sb"
+// Time-stamp: "2015-03-08 11:59:00 sb"
 
 /*
   file       OutputManipulator.hh
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014, 2015
 
   std::ostream manipulators that restore the original stream state
   after emitting their argument in a particular way.
@@ -131,7 +131,7 @@ class right_justified : public OutputManipulator {
 // comma-separated list.
 template <typename IterableContainer>
 class list_form : public OutputManipulator {
-  private:
+  protected:
     const IterableContainer& ic;
     const std::string& separator;
   public:
@@ -154,6 +154,174 @@ class list_form : public OutputManipulator {
     }
 };
 
+// Print any iterable container with size() member function as a
+// comma-separated list, but only show the first and last elements
+// for large lists.
+template <typename IterableContainer>
+class condensed_list_form : public list_form<IterableContainer> {
+  protected:
+    const size_t n_first;
+    const size_t n_last;
+    const std::string condensed_indicator;
+  public:
+    condensed_list_form(const IterableContainer& ic_,
+                        const std::string& separator_ = ", ",
+                        const size_t n_first_ = 3,
+                        const size_t n_last_ = 2,
+                        const std::string& condensed_indicator_ = "...")
+      : list_form<IterableContainer>(ic_, separator_),
+        n_first(n_first_),
+        n_last(n_last_),
+        condensed_indicator(condensed_indicator_)
+    {}
+
+    std::ostream& output(std::ostream& out) const {
+      size_t j = 0;
+      const IterableContainer& ic = list_form<IterableContainer>::ic;
+      const size_t n = ic.size();
+      for(typename IterableContainer::const_iterator i = ic.begin();
+          i != ic.end(); ++i, ++j)
+      {
+        if(j < n_first || j >= ic.size() - n_last){
+          out << *i;
+          if(j < n - 1){
+            out << list_form<IterableContainer>::separator;
+          }
+        }
+        else{
+          out << condensed_indicator;
+        }
+      }
+      return out;
+    }
+};
+
+template <typename T>
+class identity_form : public OutputManipulator {
+  private:
+    const T& t;
+  public:
+    identity_form(const T& t_)
+      : t(t_)
+    {}
+    std::ostream& output(std::ostream& out) const {
+      out << t;
+      return out;
+    }
+};
+
+// FIXME: !!!
+//
+// This does not work yet. Problem is that we want to be able to say
+// "Print a dictionary (or list), and use a particular form for the
+// keys and another one for the values." This is fine as long as the
+// form does not have any arguments besides the thing to spit out.
+// (works with identity_form, for instance).
+//
+// Otherwise, would have to know all the arguments to the child forms
+// at compile time and pass them through as template arguments. This
+// means that the whole framework here has to change and we also do
+// not always want that or know the arguments at compile time.
+//
+// Other options? Somehow would need to pass through an instantiated
+// form object but without being linked to a thing to output already.
+// This would also change the framework here, because the
+// OutputManipulators have to become functors called with operator()
+// of the type form(arguments)(const T& t) instead of taking T as an
+// argument to the constructor.
+//
+// Only other way to output non-standard types then is to define
+// operator<< for them which ties the program to a particular output
+// form.
+
+// Print any dictionary container with size() member function and
+// iterator->first, iterator->second as a comma-separated list.
+template <typename DictionaryContainer,
+          typename KeyForm = identity_form<typename DictionaryContainer::key_type>,
+          typename ValueForm = identity_form<typename DictionaryContainer::value_type>
+          >
+class dict_form : public OutputManipulator {
+  protected:
+    const DictionaryContainer& ic;
+    const std::string& map_indicator;
+    const std::string& separator;
+  public:
+    dict_form(const DictionaryContainer& ic_,
+              const std::string& map_indicator_ = " -> ",
+              const std::string& separator_ = ", ")
+      : ic(ic_),
+        map_indicator(map_indicator_),
+        separator(separator_)
+    {}
+    std::ostream& output(std::ostream& out) const {
+      size_t j = 0;
+      const size_t n = ic.size();
+      for(typename DictionaryContainer::const_iterator i = ic.begin();
+          i != ic.end(); ++i, ++j)
+      {
+        out << KeyForm(i->first) << map_indicator << ValueForm(i->second);
+        if(j < n - 1){
+          out << separator;
+        }
+      }
+      return out;
+    }
+};
+
+// Print any dictionary container with size() member function and
+// iterator->first, iterator->second as a comma-separated list, but
+// only show the first and last elements for large dictionaries.
+template <typename DictionaryContainer,
+          typename KeyForm = identity_form<typename DictionaryContainer::key_type>,
+          typename ValueForm = identity_form<typename DictionaryContainer::value_type>
+          >
+class condensed_dict_form : public dict_form<DictionaryContainer,
+                                             KeyForm,
+                                             ValueForm>
+{
+  public:
+    typedef dict_form<DictionaryContainer, KeyForm, ValueForm> base_type_t;
+  protected:
+    const size_t n_first;
+    const size_t n_last;
+    const std::string condensed_indicator;
+  public:
+    condensed_dict_form(const DictionaryContainer& ic_,
+                        const std::string& map_indicator_ = " -> ",
+                        const std::string& separator_ = ", ",
+                        const size_t n_first_ = 3,
+                        const size_t n_last_ = 2,
+                        const std::string& condensed_indicator_ = "...")
+      : base_type_t(ic_, map_indicator_, separator_),
+        n_first(n_first_),
+        n_last(n_last_),
+        condensed_indicator(condensed_indicator_)
+    {}
+
+    std::ostream& output(std::ostream& out) const {
+      size_t j = 0;
+      const DictionaryContainer& ic = base_type_t::ic;
+      const size_t n = ic.size();
+      for(typename DictionaryContainer::const_iterator i = ic.begin();
+          i != ic.end(); ++i, ++j)
+      {
+        if(j < n_first || j >= ic.size() - n_last){
+          out << i->first
+              << base_type_t::map_indicator
+              << i->second;
+          if(j < n - 1){
+            out << base_type_t::separator;
+          }
+        }
+        else{
+          out << condensed_indicator;
+        }
+      }
+      return out;
+    }
+};
+
+
 // Print std::vector as list
 template <typename T>
 class vector_form : public OutputManipulator {
@@ -168,6 +336,22 @@ class vector_form : public OutputManipulator {
       return out;
     }
 };
+
+// Print std::array as list
+template <typename T, size_t N>
+class array_form : public OutputManipulator {
+  private:
+    const std::array<T, N>& v;
+  public:
+    array_form(const std::array<T, N>& v_)
+      : v(v_)
+    {}
+    std::ostream& output(std::ostream& out) const {
+      out << "{" << list_form< std::array<T, N> >(v, ", ") << "}";
+      return out;
+    }
+};
+
 
 
 // Print std::vector of unsigned integers as list of hex numbers with addresses
@@ -276,7 +460,6 @@ class double_full_precision_form : public OutputManipulator {
       return out;
     }
 };
-
 
 
 #endif // OUTPUTMANIPULATOR_HH__F059345E_2A18_4FD8_85C8_5D78AA02D4FE
