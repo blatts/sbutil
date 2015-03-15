@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-03-08 11:59:00 sb"
+// Time-stamp: "2015-03-14 22:17:23 sb"
 
 /*
   file       OutputManipulator.hh
@@ -243,13 +243,19 @@ template <typename DictionaryContainer,
 class dict_form : public OutputManipulator {
   protected:
     const DictionaryContainer& ic;
+    const KeyForm& key_form;
+    const ValueForm& value_form;
     const std::string& map_indicator;
     const std::string& separator;
   public:
     dict_form(const DictionaryContainer& ic_,
+              const KeyForm& key_form_,
+              const ValueForm& value_form_,
               const std::string& map_indicator_ = " -> ",
               const std::string& separator_ = ", ")
       : ic(ic_),
+        key_form(key_form_),
+        value_form(value_form_),
         map_indicator(map_indicator_),
         separator(separator_)
     {}
