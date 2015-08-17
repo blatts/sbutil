@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-03-14 22:17:23 sb"
+// Time-stamp: "2015-08-17 20:21:13 sb"
 
 /*
   file       OutputManipulator.hh
@@ -146,6 +146,31 @@ class list_form : public OutputManipulator {
           i != ic.end(); ++i, ++j)
       {
         out << *i;
+        if(j < n - 1){
+          out << separator;
+        }
+      }
+      return out;
+    }
+};
+
+template <typename IterableContainer>
+class ptr_list_form : public OutputManipulator {
+  protected:
+    const IterableContainer& ic;
+    const std::string& separator;
+  public:
+    ptr_list_form(const IterableContainer& ic_,
+                  const std::string& separator_ = ", ")
+      : ic(ic_), separator(separator_)
+    {}
+    std::ostream& output(std::ostream& out) const {
+      size_t j = 0;
+      const size_t n = ic.size();
+      for(typename IterableContainer::const_iterator i = ic.begin();
+          i != ic.end(); ++i, ++j)
+      {
+        out << **i;
         if(j < n - 1){
           out << separator;
         }
@@ -342,6 +367,21 @@ class vector_form : public OutputManipulator {
       return out;
     }
 };
+
+template <typename T, typename Pointer = std::unique_ptr<T> >
+class ptr_vector_form : public OutputManipulator {
+  private:
+    const std::vector< Pointer >& v;
+  public:
+    ptr_vector_form(const std::vector< Pointer >& v_)
+      : v(v_)
+    {}
+    std::ostream& output(std::ostream& out) const {
+      out << "(" << ptr_list_form< std::vector< Pointer > >(v, ", ") << ")";
+      return out;
+    }
+};
+
 
 // Print std::array as list
 template <typename T, size_t N>
