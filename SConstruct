@@ -27,14 +27,14 @@ int main(int, char**){
 '''
   context.Message('Checking whether `%s\' accepts -std=c++11... ' % \
                   context.env['CXX'])
-  cache_cxxflags = context.env['CXXFLAGS']
+  #cache_cxxflags = context.env['CXXFLAGS']
   context.env.Append(CXXFLAGS = '-std=c++11')
   ret = context.TryLink(cxx11_compatible_source, '.cc')
   if ret:
     context.Result('yes')
   else:
     context.Result('no')
-  context.env.Replace(CXXFLAGS = cache_cxxflags)
+  #context.env.Replace(CXXFLAGS = cache_cxxflags)
   return ret
 
 # Autoconf
