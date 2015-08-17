@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-08-17 20:20:43 sb"
+// Time-stamp: "2015-08-17 23:12:01 sb"
 
 /*
   file       Superposition.hh
@@ -10,6 +10,8 @@
 
 #ifndef SUPERPOSITION_HH__896367C0_4505_11E5_8A1E_283737241892
 #define SUPERPOSITION_HH__896367C0_4505_11E5_8A1E_283737241892
+
+#include "Representable.hh"
 
 #include <vector>
 #include <memory>
