@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-06-02 11:56:13 sb"
+// Time-stamp: "2015-08-18 18:39:37 sb"
 
 /*
   file       Const.cc
-  copyright  (c) Sebastian Blatt 2014
+  copyright  (c) Sebastian Blatt 2014, 2015
 
  */
 
@@ -86,6 +86,9 @@ DEFINE_CONST(hbar, Const::h/(2.0 * Const::pi));
 
 DEFINE_CONST(bohrradius, Const::hbar / Const::electronmass / \
              Const::c / Const::alpha);
+
+DEFINE_CONST(muB, Const::electroncharge * Const::hbar / \
+             (2.0 * Const::electronmass));
 
 
 // ---------------------------------------------------------- Standard quantities

@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-01-14 09:47:58 sb"
+// Time-stamp: "2015-08-18 15:54:21 sb"
 
 /*
   file       Point.hh
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014, 2015
 
  */
 

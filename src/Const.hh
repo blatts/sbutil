@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-06-02 11:37:15 sb"
+// Time-stamp: "2015-08-18 18:38:57 sb"
 
 /*
   file       Const.hh
-  copyright  (c) Sebastian Blatt 2014
+  copyright  (c) Sebastian Blatt 2014, 2015
 
   Fundamental constants and other physical quantities in SI units
   specified in double precision. See Const.cc for
@@ -36,6 +36,7 @@ namespace Const
   extern const double epsilon0; // vacuum permittivity
   extern const double hbar; // h / (2 \pi)
   extern const double mu0; // vacuum permeability
+  extern const double muB; // Bohr magneton
 
   // Standard quantities
 
