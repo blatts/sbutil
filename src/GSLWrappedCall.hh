@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-10-15 15:26:13 sb"
+// Time-stamp: "2015-08-20 22:23:13 sb"
 
 /*
   file       GSLWrappedCall.hh
-  copyright  (c) Sebastian Blatt 2014
+  copyright  (c) Sebastian Blatt 2014, 2015
 
 
   Define an Exception throwing convenience wrapper to validate all GSL
@@ -51,7 +51,7 @@ class ValidatorGSL : public Validator<int> {
     std::ostream& InvalidMessage(const int& x, std::ostream& out) const {
       const std::string n = typeid(int).name();
       out << n << " (" << x << " == GSL_SUCCESS) returned false.\n"
-          << gsl_strerror(x);
+          << "gsl_strerror: \"" << gsl_strerror(x) << "\"";
       return out;
     }
 };
