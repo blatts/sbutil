@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-08-17 23:12:01 sb"
+// Time-stamp: "2015-08-18 18:54:19 sb"
 
 /*
   file       Superposition.hh
@@ -20,7 +20,7 @@
 template<typename S>
 class Superposition : public Representable {
   public:
-    typedef std::unique_ptr<S> ptr_t;
+    typedef std::shared_ptr<S> ptr_t;
     typedef std::vector<ptr_t> vector_t;
   protected:
     vector_t elements;
@@ -57,7 +57,7 @@ class Superposition : public Representable {
     }
 
     std::ostream& Represent(std::ostream& out) const {
-      out << ptr_vector_form<S>(elements);
+      out << ptr_vector_form<S, std::shared_ptr<S> >(elements);
       return out;
     }
 
