@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-08-17 20:21:13 sb"
+// Time-stamp: "2015-08-20 21:18:49 sb"
 
 /*
   file       OutputManipulator.hh
@@ -17,8 +17,12 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <array>
 #include <stdint.h>
 #include <sstream>
+#include <type_traits>
+#include <memory>
+#include <limits>
 
 // Base class for custom output manipulators, implements
 // UNWIND-PROTECT for stream format state.

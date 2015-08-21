@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-10-20 14:58:04 sb"
+// Time-stamp: "2015-08-20 21:20:35 sb"
 
 /*
   file       UDPClient.cc
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  copyright  (c) Sebastian Blatt 2012, 2013, 2014, 2015
 
  */
 
@@ -18,7 +18,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#if SBUTIL_IS_PLATFORM_OSX
+#if SBUTIL_IS_PLATFORM_OSX || SBUTIL_IS_PLATFORM_LINUX
 #include <unistd.h>
 #endif
 

@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-03-07 22:02:30 sb"
+// Time-stamp: "2015-08-20 22:00:58 sb"
 
 /*
   file       SparseMatrixEvolver.cc
@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <cstring>
 
 #include <gsl/gsl_matrix.h>
 

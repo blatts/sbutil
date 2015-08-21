@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-26 14:14:13 sb"
+// Time-stamp: "2015-08-20 21:25:19 sb"
 
 /*
-  file       tiff.cc
-  copyright  (c) Sebastian Blatt 2009 -- 2014
+  file       Tiff.cc
+  copyright  (c) Sebastian Blatt 2009 -- 2015
 
  */
 
@@ -143,7 +143,11 @@ unsigned short Tiff::get(size_t x, size_t y) const {
 }
 
 size_t Tiff::get_number_of_frames(const std::string& f) {
+#if __cplusplus < 201100L
   std::auto_ptr<TiffFile> p(new TiffFile);
+#else
+  std::unique_ptr<TiffFile> p(new TiffFile);
+#endif
   size_t rc = 0u;
   try{
     if(!p->open_file(f)){
