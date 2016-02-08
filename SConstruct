@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2016-02-08 15:46:14 sb"
+# Time-stamp: "2016-02-08 16:47:16 sb"
 
 #  file       SConstruct
 #  copyright  (c) Sebastian Blatt 2013, 2014, 2015, 2016
@@ -52,7 +52,7 @@ class TestExternalCall(object):
             raise Exception('Command %s failed with code %d.\n%s' % (command_list,
                                                                      self.returncode,
                                                                      self.err))
-        return self.returncode
+        return self.returncode == 0
 
 
 class TestPackageConfig(TestExternalCall):
@@ -97,7 +97,7 @@ class TestPackageConfig(TestExternalCall):
         rc = 0
         for f in fcs:
             rc = f()
-            if rc != 0:
+            if not rc:
                 break
         return rc
 
@@ -114,20 +114,24 @@ int main(int, char**){
   #cache_cxxflags = context.env['CXXFLAGS']
   context.env.Append(CXXFLAGS = '-std=c++11')
   ret = context.TryLink(cxx11_compatible_source, '.cc')
-  if ret:
+  rc = ret == 1
+  if rc:
     context.Result('yes')
   else:
     context.Result('no')
   #context.env.Replace(CXXFLAGS = cache_cxxflags)
-  return ret
+  return rc
 
 
 def CheckGSL(context):
     context.Message('Checking for GSL using gsl-config... ')
     c = TestPackageConfig('gsl-config')
-    rc = 0
+    rc = False
     try:
         rc = c.get_all()
+        if not rc:
+          raise Exception('gsl-config failed.')
+
         context.env.Append(CXXFLAGS=c.cflags,
                            CFLAGS=c.cflags,
                            LINKFLAGS=c.libs)
@@ -139,9 +143,9 @@ int main(int, char**){
 }
 '''
         ret = context.TryLink(have_gsl_source, '.cc')
-        if not ret:
+        rc = ret == 1
+        if not rc:
             raise Exception('linking failed.')
-        rc = ret
 
     except Exception as e:
         context.Message(e.message)
@@ -163,22 +167,23 @@ int main(int, char**){
   return 0;
 }
 '''
+    rc = False
     try:
         context.env.Append(LINKFLAGS='-lhdf5',
                            CPPPATH=auto_include_directories,
                            LIBPATH=auto_library_directories)
         ret = context.TryLink(hdf5_source, '.cc')
-        if not ret:
+        rc = ret == 1
+        if not rc:
             raise Exception('linking failed.')
-        rc = ret
 
     except Exception as e:
         context.Message(e.message)
         context.Result('no')
-        return ret
+        return rc
 
     context.Result('yes')
-    return ret
+    return rc
 
 # Autoconf
 conf = Configure(env, custom_tests = {'CheckCXX11' : CheckCXX11,
