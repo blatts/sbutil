@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-08 15:51:51 sb"
+// Time-stamp: "2016-02-08 18:52:32 sb"
 
 /*
   file       UDPClient.hh
@@ -26,6 +26,9 @@
 class UDPClient{
   private:
     int fd_socket;
+    unsigned long timeout_microsecond;
+    bool last_recv_timed_out;
+
   protected:
     unsigned short server_port;
     struct sockaddr_in server_socket_address;
@@ -36,6 +39,10 @@ class UDPClient{
 
     void OpenSocket();
     void CloseSocket();
+
+    void SetTimeout(unsigned long timeout_microsecond);
+    bool DidTimeout() const;
+    void ResetDidTimeout();
 
     UDPPacket ReceiveBlocking();
 };
