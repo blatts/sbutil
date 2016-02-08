@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-03-18 17:45:41 sb"
+// Time-stamp: "2016-02-08 16:34:51 sb"
 
 /*
   file       Sparse.hh
-  copyright  (c) Sebastian Blatt 2015
+  copyright  (c) Sebastian Blatt 2015, 2016
 
   FIXME: Multiplication on StorageFlat and StorageColumnThenRow are broken.
 
@@ -389,7 +389,7 @@ namespace Sparse {
          << r << " rows";
       throw EXCEPTION(os.str());
     }
-    memset(result, sizeof(T)*N_result, 0);
+    memset(result, 0, sizeof(T)*N_result);
     storage.MultiplyByColumnVector(column, result);
   }
 
