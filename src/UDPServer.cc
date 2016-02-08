@@ -1,36 +1,38 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-06-02 10:28:32 sb"
+// Time-stamp: "2016-02-08 15:51:12 sb"
 
 /*
-  file       UDPServer.cc
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  file       UDPClient.cc
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
 #include "Platform.hh"
 
-#include <iostream>
 #include <sstream>
+#include <iomanip>
 #include <cstdio>
 #include <cstring>
 
 #include <errno.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 
-#if (SB_UTIL_PLATFORM == SB_UTIL_PLATFORM_OSX)
+#if SBUTIL_IS_PLATFORM_OSX || SBUTIL_IS_PLATFORM_LINUX
 #include <unistd.h>
 #endif
 
-#include "UDPServer.hh"
 #include "Exception.hh"
+#include "UDPServer.hh"
+#include "OutputManipulator.hh"
 
-UDPServer::UDPServer(unsigned short port)
+UDPServer::UDPServer(const std::string& server_address_,
+                       unsigned short server_port_)
   : fd_socket(0),
-    server_port(port)
+    server_address(server_address_),
+    server_port(server_port_)
 {
-  memset((void*)&server_socket_address, 0, sizeof(server_socket_address));
+  memset(&server_socket_address, 0, sizeof(server_socket_address));
   OpenSocket();
 }
 
@@ -39,9 +41,10 @@ UDPServer::~UDPServer(){
 }
 
 void UDPServer::OpenSocket(){
-  if(fd_socket) { // socket already opened
+  if(fd_socket != 0){ // socket already opened
     return;
   }
+
   if((fd_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1){
     std::ostringstream os;
     os << "socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP) failed\n"
@@ -49,38 +52,11 @@ void UDPServer::OpenSocket(){
     throw EXCEPTION(os.str());
   }
 
-#if USE_SO_REUSEADDR != 0
-  // use SO_REUSEADDR to avoid hanging in this state
-  // http://hea-www.harvard.edu/~fine/Tech/addrinuse.html
-  int tr = 0;
-  socklen_t l = sizeof(tr);
-  if(getsockopt(fd_socket, SOL_SOCKET, SO_REUSEADDR, (void*)&tr, &l) == -1){
-    std::ostringstream os;
-    os << "getsockopt(SOL_SOCKET, SO_REUSEADDR) failed\n"
-       << strerror(errno);
-    throw EXCEPTION(os.str());
-  }
-  // set SO_REUSEADDR if not set
-  if(tr != SO_REUSEADDR){
-    tr = 1;
-    if(setsockopt(fd_socket, SOL_SOCKET, SO_REUSEADDR, &tr, sizeof(tr)) == -1){
-      std::ostringstream os;
-      os << "setsockopt(SOL_SOCKET, SO_REUSEADDR, 1, sizeof(int)) failed\n"
-         << strerror(errno);
-      throw EXCEPTION(os.str());
-    }
-  }
-#endif
-
   server_socket_address.sin_family = AF_INET;
   server_socket_address.sin_port = htons(server_port);
-  server_socket_address.sin_addr.s_addr = htonl(INADDR_ANY);
-
-  if(bind(fd_socket, (const sockaddr*)&server_socket_address,
-          sizeof(server_socket_address)) == -1)
-  {
+  if(inet_aton(server_address.c_str(), &server_socket_address.sin_addr) == 0){
     std::ostringstream os;
-    os << "bind(INADDR_ANY:" << server_port << ") failed\n"
+    os << "inet_aton(" << server_address << ") failed\n"
        << strerror(errno);
     throw EXCEPTION(os.str());
   }
@@ -88,36 +64,60 @@ void UDPServer::OpenSocket(){
 
 void UDPServer::CloseSocket(){
   if(fd_socket){
- #if CLOSE_SOCKET_DELAY_SECONDS > 0
-    sleep(CLOSE_SOCKET_DELAY_SECONDS);
- #endif
     close(fd_socket);
     fd_socket = 0;
   }
 }
 
-UDPPacket UDPServer::ReceiveBlocking(){
-  static char buf[MAX_UDP_PACKET_LENGTH];
-  if(fd_socket == 0){ // socket not open
-    throw EXCEPTION("Socket not opened.");
+void UDPServer::SendPacket(const std::string& data) const {
+  if(fd_socket == 0){
+    throw EXCEPTION("Socket not open.");
   }
-
-  sockaddr_in client_socket_address;
-  socklen_t length = sizeof(client_socket_address);
-  ssize_t n_bytes = recvfrom(fd_socket, buf, MAX_UDP_PACKET_LENGTH, 0,
-                             (sockaddr*) &client_socket_address,
-                             &length);
-  if(n_bytes == -1){
+  if(sendto(fd_socket, data.c_str(), data.size(), 0,
+            (const sockaddr*) &server_socket_address,
+            sizeof(server_socket_address)) == -1)
+  {
     std::ostringstream os;
-    os << "recvfrom() failed\n" << strerror(errno);
+    os << "sendto(" << server_address << ":" << server_port << ", "
+       << "\"" << data << "\" failed\n"
+       << strerror(errno);
     throw EXCEPTION(os.str());
   }
-  UDPPacket packet;
-  packet.ParseAddress(client_socket_address);
-  packet.data.resize(n_bytes);
-  std::copy(buf, buf+n_bytes, packet.data.begin());
-  return packet;
 }
+
+void UDPServer::SendPacket(const uint32_t* binary_data, size_t length) const {
+  if(fd_socket == 0){
+    throw EXCEPTION("Socket not open.");
+  }
+  if(sendto(fd_socket, (const char*)binary_data, sizeof(uint32_t)*length, 0,
+            (const sockaddr*) &server_socket_address,
+            sizeof(server_socket_address)) == -1)
+  {
+    std::ostringstream os;
+    os << "sendto(" << server_address << ":" << server_port << ", \n";
+    for(size_t j=0; j<length; ++j){
+      os << hex_form<uint32_t>(binary_data[j]);
+      if(j < length - 1){
+        os << ",";
+      }
+      else{
+        os << ")";
+      }
+      os << "\n";
+    }
+    os << strerror(errno);
+    throw EXCEPTION(os.str());
+  }
+}
+
+uint32_t UDPServer::GetServerIPAddress() const {
+  return ntohl(server_socket_address.sin_addr.s_addr);
+}
+
+uint16_t UDPServer::GetServerIPPort() const {
+  return ntohs(server_socket_address.sin_port);
+}
+
 
 
 // UDPServer.cc ends here

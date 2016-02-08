@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-10-12 12:56:45 sb"
+# Time-stamp: "2016-02-08 15:49:32 sb"
 
 #  file       SConscript
 #  copyright  (c) :::author::: :::year:::
@@ -14,7 +14,7 @@ Import('env', 'using_cxx11')
 localenv = env.Clone()
 
 programs = [
-    ':::project:::',
+    'eventserver',
     ]
 
 build_directory = 'build/scons/'
@@ -26,10 +26,6 @@ include_directories = [
 library_directories = [
     os.path.realpath('sbutil/build/scons/sbutil')
     ]
-
-if os.path.isdir('/sw'):
-  include_directories = ['/sw/include',] + include_directories
-  library_directories = ['/sw/lib',] + library_directories
 
 frameworks = []
 
@@ -62,7 +58,7 @@ localenv.SConscript('sbutil/SConscript',
 
 # Build main program
 localenv.Program(programs[0],
-                 [':::project:::.cc',
+                 ['eventserver.cc',
                   ],
                   LIBS = ['sbutil'])
 

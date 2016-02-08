@@ -1,40 +1,47 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-10-20 14:55:54 sb"
+// Time-stamp: "2016-02-08 15:51:51 sb"
 
 /*
   file       UDPClient.hh
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
- */
+*/
 
 
-#ifndef UDPCLIENT_HH__B7CA5A67_6C37_42DF_A4F5_9D21373080F8
-#define UDPCLIENT_HH__B7CA5A67_6C37_42DF_A4F5_9D21373080F8
+#ifndef UDPCLIENT_HH__F52FD72C_DA19_4450_A2DA_46ADADB36303
+#define UDPCLIENT_HH__F52FD72C_DA19_4450_A2DA_46ADADB36303
 
 #include "UDPPacket.hh"
-#include <stdint.h>
 
-class UDPClient {
+// Windows maximal UDP packet length see
+// http://stackoverflow.com/questions/1098897/what-is-the-largest-safe-udp-packet-size-on-the-internet
+#define MAX_UDP_PACKET_LENGTH 65507
+
+// Wait before closing server socket to avoid TIME_WAIT errors
+#define CLOSE_SOCKET_DELAY_SECONDS 2
+
+// Use SO_REUSEADDR?
+#define USE_SO_REUSEADDR 1
+
+class UDPClient{
   private:
     int fd_socket;
-    std::string server_address;
+  protected:
     unsigned short server_port;
     struct sockaddr_in server_socket_address;
 
   public:
-    UDPClient(const std::string& server_address_,
-               unsigned short server_port_);
+    UDPClient(unsigned short port);
     ~UDPClient();
 
     void OpenSocket();
     void CloseSocket();
-    void SendPacket(const std::string& data) const;
-    void SendPacket(const uint32_t* binary_data, size_t length) const;
-    uint32_t GetServerIPAddress() const;
-    std::string GetServerIPAddressString() const {return server_address;}
-    uint16_t GetServerIPPort() const;
+
+    UDPPacket ReceiveBlocking();
 };
 
-#endif // UDPCLIENT_HH__B7CA5A67_6C37_42DF_A4F5_9D21373080F8
+
+
+#endif // UDPCLIENT_HH__F52FD72C_DA19_4450_A2DA_46ADADB36303
 
 // UDPClient.hh ends here

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-11-14 13:42:23 sb"
+# Time-stamp: "2016-02-08 15:47:18 sb"
 
 #  file       SConscript
-#  copyright  (c) Sebastian Blatt 2013, 2014
+#  copyright  (c) Sebastian Blatt 2013, 2014, 2015, 2016
 
 # environment variables:
 #   LIBPATH, LIBS, ASFLAGS, LINKFLAGS, CPPFLAGS, CPPPATH, CCFLAGS
@@ -23,6 +23,7 @@ include_directories = [
 
 library_directories = [
     ]
+
 
 frameworks = []
 
@@ -51,9 +52,6 @@ SConscript('src/SConscript',
            variant_dir = build_directory + 'sbutil',
            duplicate = 0,
            exports = {'env' : localenv})
-
-localenv.Append(CPPPATH = os.path.realpath('catch'))
-localenv.Append(LIBPATH = os.path.realpath(build_directory))
 
 SConscript('src/SConscript-test',
            variant_dir = test_directory + 'sbutil',
