@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 14:58:31 sb"
+// Time-stamp: "2016-02-12 17:25:40 sb"
 
 /*
   file       Timestamp.hh
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
   TODO: Check out new C++11 <chrono> library. Is it general enough to
   use here? May also want to combine this file with PerformanceCounter.hh.
@@ -21,8 +21,8 @@
 // Epoch in units of seconds plus unsigned integer microsecond offset.
 class Timestamp : public Representable {
   private:
-    uint32_t stamp;
-    uint32_t microseconds;
+    uint64_t stamp;
+    uint64_t microseconds;
   public:
     Timestamp(); // Defaults to calling Now()
     Timestamp(uint32_t stamp_, uint32_t microseconds_) { Set(stamp_, microseconds_);}

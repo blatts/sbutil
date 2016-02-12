@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 17:09:41 sb"
+// Time-stamp: "2016-02-12 17:33:17 sb"
 
 /*
   file       Timestamp.cc
@@ -12,8 +12,10 @@
 #include <cstring>
 #include <cerrno>
 #include <cmath>
-#include <sys/time.h>
+#include <ctime>
 #include <sstream>
+
+#include <sys/time.h>
 
 #include "Timestamp.hh"
 #include "OutputManipulator.hh"
@@ -28,9 +30,17 @@ Timestamp::Timestamp()
 }
 
 std::ostream& Timestamp::Represent(std::ostream& out) const {
-  tm x;
+  // Have to do this cast here, because there is no guarantee
+  // whatsoever about the type of time_t. Currently on my systems, it
+  // seems that this points to int64_t. However, this was not so
+  // before and caused this piece of code to break!
+  //
+  time_t s = stamp;
+
+  struct tm x;
   memset(&x, 0, sizeof(x));
-  if(localtime_r((time_t*)&stamp, &x)){
+
+  if(localtime_r(&s, &x)){
     out << right_justified<int>(1900 + x.tm_year, 4, '0') << "-"
         << right_justified<int>(1 + x.tm_mon, 2, '0') << "-"
         << right_justified<int>(x.tm_mday, 2, '0') << " "
@@ -39,7 +49,7 @@ std::ostream& Timestamp::Represent(std::ostream& out) const {
         << right_justified<int>(x.tm_sec, 2, '0') << ":"
         << microseconds / 1000 << ":"
         << microseconds % 1000 << " "
-        << tzname[1];
+        << tzname[x.tm_isdst];
   }
   return out;
 }
