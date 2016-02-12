@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-08 18:52:32 sb"
+// Time-stamp: "2016-02-12 09:20:12 sb"
 
 /*
   file       UDPClient.hh
@@ -30,8 +30,8 @@ class UDPClient{
     bool last_recv_timed_out;
 
   protected:
-    unsigned short server_port;
-    struct sockaddr_in server_socket_address;
+    unsigned short client_port;
+    struct sockaddr_in client_socket_address;
 
   public:
     UDPClient(unsigned short port);

@@ -1,8 +1,8 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-08 15:51:12 sb"
+// Time-stamp: "2016-02-12 11:41:10 sb"
 
 /*
-  file       UDPClient.cc
+  file       UDPServer.cc
   copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
@@ -69,11 +69,11 @@ void UDPServer::CloseSocket(){
   }
 }
 
-void UDPServer::SendPacket(const std::string& data) const {
+void UDPServer::SendPacket(const char* data, size_t length) const {
   if(fd_socket == 0){
     throw EXCEPTION("Socket not open.");
   }
-  if(sendto(fd_socket, data.c_str(), data.size(), 0,
+  if(sendto(fd_socket, data, length, 0,
             (const sockaddr*) &server_socket_address,
             sizeof(server_socket_address)) == -1)
   {
@@ -85,30 +85,15 @@ void UDPServer::SendPacket(const std::string& data) const {
   }
 }
 
-void UDPServer::SendPacket(const uint32_t* binary_data, size_t length) const {
-  if(fd_socket == 0){
-    throw EXCEPTION("Socket not open.");
-  }
-  if(sendto(fd_socket, (const char*)binary_data, sizeof(uint32_t)*length, 0,
-            (const sockaddr*) &server_socket_address,
-            sizeof(server_socket_address)) == -1)
-  {
-    std::ostringstream os;
-    os << "sendto(" << server_address << ":" << server_port << ", \n";
-    for(size_t j=0; j<length; ++j){
-      os << hex_form<uint32_t>(binary_data[j]);
-      if(j < length - 1){
-        os << ",";
-      }
-      else{
-        os << ")";
-      }
-      os << "\n";
-    }
-    os << strerror(errno);
-    throw EXCEPTION(os.str());
-  }
+
+void UDPServer::SendPacket(const std::string& data) const {
+  SendPacket(data.c_str(), data.size());
 }
+
+void UDPServer::SendPacket(const UDPPacket& packet) const {
+  SendPacket(packet.GetData());
+}
+
 
 uint32_t UDPServer::GetServerIPAddress() const {
   return ntohl(server_socket_address.sin_addr.s_addr);

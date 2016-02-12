@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2016-02-08 15:47:18 sb"
+# Time-stamp: "2016-02-12 08:15:28 sb"
 
 #  file       SConscript
 #  copyright  (c) Sebastian Blatt 2013, 2014, 2015, 2016
@@ -53,9 +53,9 @@ SConscript('src/SConscript',
            duplicate = 0,
            exports = {'env' : localenv})
 
-SConscript('src/SConscript-test',
-           variant_dir = test_directory + 'sbutil',
-           duplicate = 0,
-           exports = {'env' : localenv})
+# SConscript('src/SConscript-test',
+#            variant_dir = test_directory + 'sbutil',
+#            duplicate = 0,
+#            exports = {'env' : localenv})
 
 # SConscript ends here

@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-08 18:57:22 sb"
+// Time-stamp: "2016-02-12 11:40:35 sb"
 
 /*
   file       UDPClient.cc
@@ -30,9 +30,9 @@ UDPClient::UDPClient(unsigned short port)
   : fd_socket(0),
     timeout_microsecond(0),
     last_recv_timed_out(false),
-    server_port(port)
+    client_port(port)
 {
-  memset((void*)&server_socket_address, 0, sizeof(server_socket_address));
+  memset((void*)&client_socket_address, 0, sizeof(client_socket_address));
   OpenSocket();
 }
 
@@ -74,15 +74,15 @@ void UDPClient::OpenSocket(){
   }
 #endif
 
-  server_socket_address.sin_family = AF_INET;
-  server_socket_address.sin_port = htons(server_port);
-  server_socket_address.sin_addr.s_addr = htonl(INADDR_ANY);
+  client_socket_address.sin_family = AF_INET;
+  client_socket_address.sin_port = htons(client_port);
+  client_socket_address.sin_addr.s_addr = htonl(INADDR_ANY);
 
-  if(bind(fd_socket, (const sockaddr*)&server_socket_address,
-          sizeof(server_socket_address)) == -1)
+  if(bind(fd_socket, (const sockaddr*)&client_socket_address,
+          sizeof(client_socket_address)) == -1)
   {
     std::ostringstream os;
-    os << "bind(INADDR_ANY:" << server_port << ") failed\n"
+    os << "bind(INADDR_ANY:" << client_port << ") failed\n"
        << strerror(errno);
     throw EXCEPTION(os.str());
   }
@@ -102,6 +102,7 @@ void UDPClient::SetTimeout(unsigned long timeout_microsecond_){
   timeout_microsecond = timeout_microsecond_;
 
   struct timeval tv;
+  memset(&tv, 0, sizeof(tv));
   tv.tv_sec = timeout_microsecond / 1000000;
   tv.tv_usec = timeout_microsecond % 1000000;
 
@@ -149,9 +150,10 @@ UDPPacket UDPClient::ReceiveBlocking(){
 
   last_recv_timed_out = false;
   UDPPacket packet;
-  packet.ParseAddress(client_socket_address);
-  packet.data.resize(n_bytes);
-  std::copy(buf, buf+n_bytes, packet.data.begin());
+  packet.SetData(buf, n_bytes);
+  packet.SetAddress(inet_ntoa(client_socket_address.sin_addr));
+  packet.SetPort(ntohs(client_socket_address.sin_port));
+
   return packet;
 }
 

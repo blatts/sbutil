@@ -1,8 +1,8 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-08 15:50:54 sb"
+// Time-stamp: "2016-02-12 08:05:25 sb"
 
 /*
-  file       UDPClient.hh
+  file       UDPServer.hh
   copyright  (c) Sebastian Blatt 2012 -- 2016
 
 */
@@ -28,8 +28,24 @@ class UDPServer {
 
     void OpenSocket();
     void CloseSocket();
-    void SendPacket(const std::string& data) const;
-    void SendPacket(const uint32_t* binary_data, size_t length) const;
+
+    void SendPacket(const char* data, size_t length) const;
+    void SendPacket(const std::string& data) const; // careful with embedded zeros!
+
+    template<typename T>
+    void SendPacket(const T* binary_data, size_t length) const {
+      SendPacket(reinterpret_cast<const char*>(binary_data),
+                 sizeof(T) * length);
+    }
+
+    template<typename T>
+    void SendPacket(const std::vector<T>& binary_data) const{
+      SendPacket(reinterpret_cast<const char*>(&(binary_data[0])),
+                 sizeof(T) * binary_data.size());
+    }
+
+    void SendPacket(const UDPPacket& packet) const;
+
     uint32_t GetServerIPAddress() const;
     std::string GetServerIPAddressString() const {return server_address;}
     uint16_t GetServerIPPort() const;
