@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 11:40:35 sb"
+// Time-stamp: "2016-02-12 16:28:21 sb"
 
 /*
   file       UDPClient.cc
@@ -16,7 +16,6 @@
 
 #include <errno.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>
 #include <sys/socket.h>
 
 #if (SB_UTIL_PLATFORM == SB_UTIL_PLATFORM_OSX)
@@ -29,7 +28,6 @@
 UDPClient::UDPClient(unsigned short port)
   : fd_socket(0),
     timeout_microsecond(0),
-    last_recv_timed_out(false),
     client_port(port)
 {
   memset((void*)&client_socket_address, 0, sizeof(client_socket_address));
@@ -115,46 +113,55 @@ void UDPClient::SetTimeout(unsigned long timeout_microsecond_){
   }
 }
 
-bool UDPClient::DidTimeout() const {
-  return last_recv_timed_out;
-}
 
-void UDPClient::ResetDidTimeout() {
-  last_recv_timed_out = false;
-}
+UDPClient::receive_state_t UDPClient::ReceiveBlocking(UDPPacket& p, bool nothrow){
+  static uint8_t buf[MAX_UDP_PACKET_LENGTH];
 
-
-UDPPacket UDPClient::ReceiveBlocking(){
-  static char buf[MAX_UDP_PACKET_LENGTH];
   if(fd_socket == 0){ // socket not open
-    throw EXCEPTION("Socket not opened.");
+    if(nothrow){
+      return receive_state_t::ERR_SOCKET;
+    }
+    else{
+      throw EXCEPTION("Socket not opened.");
+    }
   }
 
-  sockaddr_in client_socket_address;
-  socklen_t length = sizeof(client_socket_address);
+  sockaddr_in sender_socket_address;
+  memset(&sender_socket_address, 0, sizeof(sender_socket_address));
+  socklen_t length = sizeof(sender_socket_address);
   ssize_t n_bytes = recvfrom(fd_socket, buf, MAX_UDP_PACKET_LENGTH, 0,
-                             (sockaddr*) &client_socket_address,
+                             (sockaddr*) &sender_socket_address,
                              &length);
+
+  // If the socket allows timeout, signal this.
   if(timeout_microsecond > 0 && n_bytes == -1 && errno == EAGAIN){
-    // Return empty packet and signal timeout
-    last_recv_timed_out = true;
-    UDPPacket packet;
-    return packet;
+    return receive_state_t::TIMEOUT;
   }
 
+  // FIXME: Should add all possible failure modes of recvfrom() in a
+  // transparent way. Need to switch on value of errno to do this.
   if(n_bytes == -1){
-    std::ostringstream os;
-    os << "recvfrom() failed\n" << strerror(errno);
-    throw EXCEPTION(os.str());
+    if(nothrow){
+      return receive_state_t::ERR_RECVFROM;
+    }
+    else{
+      std::ostringstream os;
+      os << "recvfrom() failed\n" << strerror(errno);
+      throw EXCEPTION(os.str());
+    }
   }
 
-  last_recv_timed_out = false;
-  UDPPacket packet;
-  packet.SetData(buf, n_bytes);
-  packet.SetAddress(inet_ntoa(client_socket_address.sin_addr));
-  packet.SetPort(ntohs(client_socket_address.sin_port));
+  p.SetData(buf, n_bytes);
+  p.SetAddress(inet_ntoa(sender_socket_address.sin_addr));
+  p.SetPort(ntohs(sender_socket_address.sin_port));
+  // std::cerr << "ReceiveBlocking: " << std::string(buf, buf+n_bytes) << std::endl;
+  // std::cerr << "ReceiveBlocking: " << p << std::endl;
 
-  return packet;
+  if(!p.Deserialize(nothrow)){
+    return receive_state_t::ERR_SERIALIZE;
+  }
+
+  return receive_state_t::OK;
 }
 
 

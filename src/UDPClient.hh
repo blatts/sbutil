@@ -1,9 +1,15 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 09:20:12 sb"
+// Time-stamp: "2016-02-12 16:01:52 sb"
 
 /*
   file       UDPClient.hh
   copyright  (c) Sebastian Blatt 2012 -- 2016
+
+  Provides a simple wrapper around a "connectionless" socket that is
+  bound to an IPV4 client_address at client_port. The socket can be
+  used to receive UDP packets using recvfrom.
+
+  Idea: instantiate one of these and call ReceiveBlocking.
 
 */
 
@@ -12,6 +18,7 @@
 #define UDPCLIENT_HH__F52FD72C_DA19_4450_A2DA_46ADADB36303
 
 #include "UDPPacket.hh"
+#include <netinet/in.h>
 
 // Windows maximal UDP packet length see
 // http://stackoverflow.com/questions/1098897/what-is-the-largest-safe-udp-packet-size-on-the-internet
@@ -27,7 +34,6 @@ class UDPClient{
   private:
     int fd_socket;
     unsigned long timeout_microsecond;
-    bool last_recv_timed_out;
 
   protected:
     unsigned short client_port;
@@ -35,16 +41,28 @@ class UDPClient{
 
   public:
     UDPClient(unsigned short port);
-    ~UDPClient();
+    virtual ~UDPClient();
 
     void OpenSocket();
     void CloseSocket();
 
     void SetTimeout(unsigned long timeout_microsecond);
-    bool DidTimeout() const;
-    void ResetDidTimeout();
 
-    UDPPacket ReceiveBlocking();
+    // Since receiving of packets over the network can produce errors
+    // that are not the result of programmer brain damage, we can turn
+    // off the usual exception throwing on errors by setting nothrow =
+    // true to avoid unwinding the stack every time something
+    // unexpected happens.
+    //
+    typedef enum {
+      OK,            // everything worked
+      TIMEOUT,       // timeout was set, and socket timed out
+      ERR_SOCKET,    // socket not open
+      ERR_RECVFROM,  // other error from recvfrom
+      ERR_SERIALIZE  // error from UDPPacket::Deserialize
+      } receive_state_t;
+
+    receive_state_t ReceiveBlocking(UDPPacket& p, bool nothrow = false);
 };
 
 

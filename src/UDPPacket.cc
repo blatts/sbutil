@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 11:37:09 sb"
+// Time-stamp: "2016-02-12 16:22:06 sb"
 
 /*
   file       UDPPacket.cc
@@ -27,12 +27,18 @@ const UDPPacket& UDPPacket::Assign(const std::vector<uint8_t>& data_,
   return *this;
 }
 
+void UDPPacket::Clear(){
+  data.clear();
+  address.clear();
+  port = 0;
+}
+
 
 
 std::ostream& UDPPacket::Represent(std::ostream& out) const {
-  out << "UDP Packet"
-  if(port != 0 && !address.empty){
-    out << " received from " << address << ":" << port << "\n";
+  out << "UDP Packet";
+  if(port != 0 && !address.empty()){
+    out << " with address " << address << ":" << port << "\n";
   }
   else{
     out << " without address information.\n";

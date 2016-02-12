@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 11:41:10 sb"
+// Time-stamp: "2016-02-12 16:03:01 sb"
 
 /*
   file       UDPServer.cc
@@ -26,13 +26,9 @@
 #include "UDPServer.hh"
 #include "OutputManipulator.hh"
 
-UDPServer::UDPServer(const std::string& server_address_,
-                       unsigned short server_port_)
-  : fd_socket(0),
-    server_address(server_address_),
-    server_port(server_port_)
+UDPServer::UDPServer()
+  : fd_socket(0)
 {
-  memset(&server_socket_address, 0, sizeof(server_socket_address));
   OpenSocket();
 }
 
@@ -51,15 +47,6 @@ void UDPServer::OpenSocket(){
        << strerror(errno);
     throw EXCEPTION(os.str());
   }
-
-  server_socket_address.sin_family = AF_INET;
-  server_socket_address.sin_port = htons(server_port);
-  if(inet_aton(server_address.c_str(), &server_socket_address.sin_addr) == 0){
-    std::ostringstream os;
-    os << "inet_aton(" << server_address << ") failed\n"
-       << strerror(errno);
-    throw EXCEPTION(os.str());
-  }
 }
 
 void UDPServer::CloseSocket(){
@@ -69,39 +56,59 @@ void UDPServer::CloseSocket(){
   }
 }
 
-void UDPServer::SendPacket(const char* data, size_t length) const {
+bool UDPServer::SendPacket(const std::string& target_address,
+                           unsigned short target_port,
+                           const char* data,
+                           size_t length,
+                           bool nothrow) const
+{
   if(fd_socket == 0){
-    throw EXCEPTION("Socket not open.");
+    if(nothrow){
+      return false;
+    }
+    else{
+      throw EXCEPTION("Socket not open.");
+    }
   }
+
+  struct sockaddr_in target;
+  memset(&target, 0, sizeof(target));
+  target.sin_family = AF_INET;
+  target.sin_port = htons(target_port);
+
+  if(inet_aton(target_address.c_str(), &target.sin_addr) == 0){
+    if(nothrow){
+      return false;
+    }
+    else{
+      std::ostringstream os;
+      os << "inet_aton(" << target_address << ") failed\n"
+         << strerror(errno);
+      throw EXCEPTION(os.str());
+    }
+  }
+
+
   if(sendto(fd_socket, data, length, 0,
-            (const sockaddr*) &server_socket_address,
-            sizeof(server_socket_address)) == -1)
+            (const sockaddr*) &target,
+            sizeof(target)) == -1)
   {
-    std::ostringstream os;
-    os << "sendto(" << server_address << ":" << server_port << ", "
-       << "\"" << data << "\" failed\n"
-       << strerror(errno);
-    throw EXCEPTION(os.str());
+    if(nothrow){
+      return false;
+    }
+    else{
+
+      std::ostringstream os;
+      os << "sendto(" << target_address << ":" << target_port << ", "
+         << "\"" << data << "\" failed\n"
+         << strerror(errno);
+      throw EXCEPTION(os.str());
+    }
   }
+
+  return true;
 }
 
-
-void UDPServer::SendPacket(const std::string& data) const {
-  SendPacket(data.c_str(), data.size());
-}
-
-void UDPServer::SendPacket(const UDPPacket& packet) const {
-  SendPacket(packet.GetData());
-}
-
-
-uint32_t UDPServer::GetServerIPAddress() const {
-  return ntohl(server_socket_address.sin_addr.s_addr);
-}
-
-uint16_t UDPServer::GetServerIPPort() const {
-  return ntohs(server_socket_address.sin_port);
-}
 
 
 
