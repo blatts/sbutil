@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 17:41:35 sb"
+// Time-stamp: "2016-02-26 18:48:17 sb"
 
 /*
   file       CoutMutex.hh
@@ -17,14 +17,24 @@
 #include <iostream>
 #include <thread>
 
+#include "OutputManipulator.hh"
+
 class CoutMutex {
   private:
     std::mutex cout_mutex;
     std::mutex cerr_mutex;
     std::mutex clog_mutex;
+    size_t source_width;
 
   public:
-    CoutMutex(){}
+    CoutMutex()
+      : source_width(10)
+    {}
+
+    void SetSourceWidth(size_t source_width_){
+      source_width = source_width_;
+    }
+
 
     void emit(const std::string& source,
               const std::string& msg,
@@ -35,7 +45,7 @@ class CoutMutex {
 
       out << marker << " "
           << Timestamp()
-          << right_justified<std::string>(source, 10) << ": "
+          << right_justified<std::string>(source, source_width) << ": "
           << msg << std::endl;
     }
 

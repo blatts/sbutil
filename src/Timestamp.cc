@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 17:33:17 sb"
+// Time-stamp: "2016-02-12 17:48:18 sb"
 
 /*
   file       Timestamp.cc
@@ -47,8 +47,8 @@ std::ostream& Timestamp::Represent(std::ostream& out) const {
         << right_justified<int>(x.tm_hour, 2, '0') << ":"
         << right_justified<int>(x.tm_min, 2, '0') << ":"
         << right_justified<int>(x.tm_sec, 2, '0') << ":"
-        << microseconds / 1000 << ":"
-        << microseconds % 1000 << " "
+        << right_justified<int>(microseconds / 1000, 3, '0') << ":"
+        << right_justified<int>(microseconds % 1000, 3, '0') << " "
         << tzname[x.tm_isdst];
   }
   return out;
