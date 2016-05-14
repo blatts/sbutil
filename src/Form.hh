@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-03-14 23:35:37 sb"
+// Time-stamp: "2015-03-15 08:13:48 sb"
 
 /*
   file       Form.hh
@@ -53,8 +53,11 @@ namespace form
   template <typename T>
   class identity : public base<T> {
     public:
-      identity(){} // this automatically calls base()
-      identity(const T& t_) : base<T>(t_) {}
+      // C++11 trick:
+      //identity(){} // this automatically calls base()
+      //identity(const T& t_) : base<T>(t_) {}
+      using base<T>::base;
+
       std::ostream& output(std::ostream& out) const {
         out << base<T>::get_wrapped();
         return out;
