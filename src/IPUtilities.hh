@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-02-16 19:08:10 sb"
+// Time-stamp: "2016-02-27 14:25:11 sb"
 
 /*
   file       IPUtilities.hh
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
@@ -23,6 +23,16 @@ std::string StringFromIPAddress(uint32_t address_in_host_byte_order);
 // Convert IPV4 address string representation to 32-bit number in host
 // byte order.
 uint32_t IPAddressFromString(const std::string& address);
+
+// Convert uint16_t and uint32_t between host and network byte order.
+// These are only wrappers around htonl(3), htons(3), ntohl(3),
+// ntohs(3) to hide the network headers and to abstract across
+// platforms.
+uint16_t HostToNetworkByteOrder(uint16_t x);
+uint32_t HostToNetworkByteOrder(uint32_t x);
+uint16_t NetworkToHostByteOrder(uint16_t x);
+uint32_t NetworkToHostByteOrder(uint32_t x);
+
 
 // Get string representation of localhost using gethostname(3)
 std::string GetLocalhostName();

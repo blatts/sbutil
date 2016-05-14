@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-02-16 19:00:36 sb"
+// Time-stamp: "2016-02-27 14:24:09 sb"
 
 /*
   file       IPUtilities.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
@@ -39,6 +39,22 @@ uint32_t IPAddressFromString(const std::string& address){
     throw EXCEPTION(os.str());
   }
   return (uint32_t)ntohl(a);
+}
+
+uint16_t HostToNetworkByteOrder(uint16_t x){
+  return htons(x);
+}
+
+uint32_t HostToNetworkByteOrder(uint32_t x){
+  return htonl(x);
+}
+
+uint16_t NetworkToHostByteOrder(uint16_t x){
+  return ntohl(x);
+}
+
+uint32_t NetworkToHostByteOrder(uint32_t x){
+  return ntohs(x);
 }
 
 std::string GetLocalhostName(){
