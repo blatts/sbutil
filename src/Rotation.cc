@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-25 18:09:15 sb"
+// Time-stamp: "2016-06-07 13:16:57 sb"
 
 /*
   file       Rotation.cc
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
@@ -77,6 +77,11 @@ void Rotation::FromTo(const Point& u, const Point& v){
   Point axis = Cross(u,v);
   double angle = acos(u * v);
   Around(axis, angle);
+}
+
+void Rotation::FromZTo(const Point& u){
+  static const Point ez(0, 0, 1);
+  FromTo(ez, u);
 }
 
 

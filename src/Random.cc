@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 11:59:56 sb"
+// Time-stamp: "2016-06-07 13:14:51 sb"
 
 /*
   file       Random.cc
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
@@ -89,25 +89,21 @@ Point Random::UniformOnSphericalSurface(double radius){
 
 Point Random::UniformOnHalfsphereAround(const Point& normal){
   // Create random pointing in upper half sphere
-  static const Point ez = Point(0,0,1);
   Point new_direction = UniformOnSphericalSurface();
   new_direction.z = fabs(new_direction.z);
   // Rotate upper half sphere to surface normal
-  Rotation rot;
-  rot.FromTo(ez, normal);
-  return rot * new_direction;
+  return Rotation(normal) * new_direction;
 }
 
 Point Random::CosOnHalfsphereAround(const Point& normal) {
-  Point rc;
-  while(true){
-    rc = UniformOnHalfsphereAround(normal);
-    double angle = normal.Dot(rc);
-    if(Uniform() <= cos(angle)){
-      break;
-    }
-  }
-  return rc;
+  double phi = Uniform(0, 2 * M_PI);
+  double s_theta = sqrt(Uniform());
+  double c_theta = sqrt(1.0 - s_theta*s_theta);
+
+  Point new_direction(cos(phi) * s_theta,
+                      sin(phi) * s_theta,
+                      c_theta);
+  return Rotation(normal) * new_direction;
 }
 
 

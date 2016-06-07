@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-08-18 15:54:21 sb"
+// Time-stamp: "2016-06-07 13:16:06 sb"
 
 /*
   file       Point.hh
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014, 2015
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
@@ -15,15 +15,18 @@
 
 class Point : public Representable {
   public:
+    double x;
+    double y;
+    double z;
+
     Point(double x_=0.0, double y_=0.0, double z_=0.0);
+    Point(const double theta = 0.0, const double phi = 0.0);
     Point(const Point& b);
     Point& operator=(const Point& b);
 
     bool operator==(const Point& b) const;
 
-    double x;
-    double y;
-    double z;
+    void FromSpherical(const double theta, const double phi);
 
     double Length() const;
     double LengthSquared() const;

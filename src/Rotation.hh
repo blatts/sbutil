@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-01-18 12:52:19 sb"
+// Time-stamp: "2016-06-07 13:16:45 sb"
 
 /*
   file       Rotation.hh
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
@@ -23,6 +23,9 @@ class Rotation : public Representable {
 
   public:
     Rotation();
+    Rotation(const Point& p, double angle) : data(9, 0.0) {Around(p, angle);}
+    Rotation(const Point& u, const Point& v) : data(9, 0.0) {FromTo(u, v);}
+    Rotation(const Point& u) : data(9, 0.0){FromZTo(u);}
 
     void Clear();
     void Identity() {Clear();}
@@ -31,6 +34,7 @@ class Rotation : public Representable {
 
     void Around(const Point& p, double angle);
     void FromTo(const Point& u, const Point& v);
+    void FromZTo(const Point& u);
     double Trace() const;
     double GetAngle() const;
 

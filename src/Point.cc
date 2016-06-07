@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2012-01-14 09:57:37 sb"
+// Time-stamp: "2016-06-07 13:16:02 sb"
 
 /*
   file       Point.cc
-  copyright  (c) Sebastian Blatt 2012
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
  */
 
@@ -15,6 +15,13 @@ Point::Point(double x_, double y_, double z_)
   : x(x_), y(y_), z(z_)
 {
 }
+
+Point::Point(double theta, double phi)
+  : x(0), y(0), z(0)
+{
+  FromSpherical(theta, phi);
+}
+
 
 Point::Point(const Point& b)
   : Representable(),
@@ -31,6 +38,13 @@ Point& Point::operator=(const Point& b){
 
 bool Point::operator==(const Point& b) const{
   return (x == b.x) && (y == b.y) && (z == b.z);
+}
+
+void Point::FromSpherical(const double theta, const double phi){
+  double s = sin(theta);
+  x = cos(phi) * s;
+  y = sin(phi) * s;
+  z = cos(theta);
 }
 
 double Point::LengthSquared() const {
