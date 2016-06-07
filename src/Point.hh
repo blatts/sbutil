@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-06-07 13:16:06 sb"
+// Time-stamp: "2016-06-07 14:55:22 sb"
 
 /*
   file       Point.hh
@@ -20,7 +20,7 @@ class Point : public Representable {
     double z;
 
     Point(double x_=0.0, double y_=0.0, double z_=0.0);
-    Point(const double theta = 0.0, const double phi = 0.0);
+    Point(const double theta, const double phi);
     Point(const Point& b);
     Point& operator=(const Point& b);
 
