@@ -1,8 +1,8 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-23 11:42:10 sb"
+// Time-stamp: "2016-06-08 14:10:55 sb"
 
 /*
-  file       :::project:::.cc
+  file       main.cc
   copyright  (c) :::author::: :::year:::
 
  */
@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-#include "CommandLine.hh"
+#include <sbutil/CommandLine.hh>
 
 static const char* program_options[] =
 {
