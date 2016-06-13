@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-06-07 14:55:22 sb"
+// Time-stamp: "2016-06-12 13:46:53 sb"
 
 /*
   file       Point.hh
@@ -40,6 +40,9 @@ class Point : public Representable {
     Point& operator-=(const Point& b);
 
     std::ostream& Represent(std::ostream& out) const;
+    std::ostream& RepresentSeparated(std::ostream& out,
+                                     const std::string& separator = "\t") const;
+
 };
 
 Point operator*(const Point& a, double scale);

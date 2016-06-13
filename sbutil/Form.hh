@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-05-14 12:30:23 sb"
+// Time-stamp: "2016-06-08 14:42:32 sb"
 
 /*
   file       Form.hh
@@ -80,7 +80,7 @@ namespace form
   // Base interface for a std::ostream manipulator that protects the
   // stream state using ostream_unwind_protect and provides operator<<
   // functionality. Derived classes need to define the output function
-  // to emit something to the std::ostream.
+  // to emit something to std::ostream.
   //
   class manipulator {
     public:

@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 10:23:19 sb"
+// Time-stamp: "2016-06-08 14:39:56 sb"
 
 /*
   file       ThermalStatistics.hh
-  copyright  (c) Sebastian Blatt 2014
+  copyright  (c) Sebastian Blatt 2014, 2015, 2016
 
   Thermal statistics. Use this mostly to generate a vector of
   probabilities for a vector of energies.
@@ -33,6 +33,14 @@ class EnergyStatistics : public Representable {
   public:
     EnergyStatistics() {}
     virtual double operator()(const double energy) const = 0;
+
+    // normalize = true: normalize to partition function cut off at size
+    // of energy vector.
+    //
+    // normalize = false: bare Boltzmann factor without partition function
+    void Probabilities(const std::vector<double>& energies,
+                       bool normalize,
+                       std::vector<double>& probabilities);
 };
 
 class Boltzmann : public EnergyStatistics {
@@ -61,16 +69,6 @@ class FermiDirac : public EnergyStatistics {
     std::ostream& Represent(std::ostream& out) const;
 };
 
-
-// normalize = true: normalize to partition function cut off at size
-// of energy vector.
-//
-// normalize = false: bare Boltzmann factor without partition function
-
-void ProbabilitiesFromEnergies(const std::vector<double>& energies,
-                               const EnergyStatistics& statistics,
-                               bool normalize,
-                               std::vector<double>& probabilities);
 
 
 

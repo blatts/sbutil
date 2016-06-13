@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-11-13 10:18:13 sb"
+// Time-stamp: "2016-06-08 14:40:06 sb"
 
 /*
   file       ThermalStatistics.cc
-  copyright  (c) Sebastian Blatt 2014
+  copyright  (c) Sebastian Blatt 2014, 2015, 2016
 
  */
 
@@ -25,6 +25,27 @@ double BoseEinsteinFactor(double energy, double temperature, double chemical_pot
 double FermiDiracFactor(double energy, double temperature, double chemical_potential){
   return 1.0 / ( exp( (energy - chemical_potential)/(Const::kB * temperature)) + 1.0);
 }
+
+
+// ------------------------------------------------------------- EnergyStatistics
+
+
+void EnergyStatistics::Probabilities(const std::vector<double>& energies,
+                                     bool normalize,
+                                     std::vector<double>& probabilities)
+{
+  const size_t N = energies.size();
+  probabilities.resize(N);
+
+  for(size_t i=0; i<N; ++i){
+    probabilities[i] = (*this)(energies[i]);
+  }
+
+  if(normalize){
+    normalize_by_total(probabilities);
+  }
+}
+
 
 
 // -------------------------------------------------------------------- Boltzmann
@@ -80,26 +101,6 @@ std::ostream& FermiDirac::Represent(std::ostream& out) const{
   return out;
 }
 
-
-// ---------------------------------------------------- ProbabilitiesFromEnergies
-
-
-void ProbabilitiesFromEnergies(const std::vector<double>& energies,
-                               const EnergyStatistics& statistics,
-                               bool normalize,
-                               std::vector<double>& probabilities)
-{
-  const size_t N = energies.size();
-  probabilities.resize(N);
-
-  for(size_t i=0; i<N; ++i){
-    probabilities[i] = statistics(energies[i]);
-  }
-
-  if(normalize){
-    normalize_by_total(probabilities);
-  }
-}
 
 
 

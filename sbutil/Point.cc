@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-06-07 13:16:02 sb"
+// Time-stamp: "2016-06-12 13:47:43 sb"
 
 /*
   file       Point.cc
@@ -143,6 +143,12 @@ std::ostream& Point::Represent(std::ostream& out) const{
   return out;
 }
 
+std::ostream& Point::RepresentSeparated(std::ostream& out,
+                                        const std::string& separator) const
+{
+  out << x << separator << y << separator << z;
+  return out;
+}
 
 
 // Point.cc ends here
