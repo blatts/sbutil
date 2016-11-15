@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-11-07 10:59:44 sb"
+// Time-stamp: "2016-11-15 16:07:13 srlab"
 
 /*
   file       File.cc
@@ -9,7 +9,7 @@
 
 #include "File.hh"
 
-#include <ifstream>
+#include <fstream>
 #include <iostream>
 
 std::string load_ascii_file(const std::string& filename){
