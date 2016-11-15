@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-10-15 14:31:12 sb"
+// Time-stamp: "2016-11-15 15:34:53 srlab"
 
 /*
   file       WrappedCall.hh
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014
+  copyright  (c) Sebastian Blatt 2012 -- 2016
 
   Defines a convenience macro
 
@@ -58,14 +58,35 @@
 namespace metamagic
 {
 
+// Need the following two abstractions so that non-standard things
+// like int8_t* from stdint.h print correctly.
+
 template<typename T>
-std::ostream& print_list(std::ostream& out, T&& value){
+std::ostream& print_item(std::ostream& out, T&& value){
   out << value;
   return out;
 }
+
+template<typename T>
+std::ostream& print_item(std::ostream& out, T*& value){
+  if(!value){
+    out << "nullptr";
+  }
+  else{
+    // FIXME: not sure yet that this always works
+    out << value;
+  }
+  return out;
+}
+
+template<typename T>
+std::ostream& print_list(std::ostream& out, T&& value){
+  return print_item(out, value);
+}
 template<typename First, typename... Rest>
 std::ostream& print_list(std::ostream& out, First&& first, Rest&&... rest){
-  out << first << ", ";
+  print_item(out, first);
+  out << ", ";
   return print_list(out, std::forward<Rest>(rest)...);
 }
 
