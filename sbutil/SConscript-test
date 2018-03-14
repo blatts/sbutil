@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+# -*- mode: Python; coding: latin-1 -*-
+# Time-stamp: "2014-11-14 13:41:21 sb"
+
+#  file       SConscript-test
+#  copyright  (c) Sebastian Blatt 2013, 2014
+
+# environment variables:
+#   LIBPATH, LIBS, ASFLAGS, LINKFLAGS, CPPFLAGS, CPPPATH, CCFLAGS
+
+Import('env')
+
+env.Program('Random.test',
+            ['Random.cc',
+             ],
+            LIBS = ['sbutil'])
+
+# SConscript-test ends here

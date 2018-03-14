@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2014-02-23 11:46:25 sb"
+# Time-stamp: "2018-03-14 14:13:46 sb"
 
 #  file       create_project.py
-#  copyright  (c) Sebastian Blatt 2014
+#  copyright  (c) Sebastian Blatt 2014 -- 2018
 
 import os
 import os.path
@@ -13,58 +13,58 @@ import time
 import re
 
 def run_external(cmd):
-  print "run_external: \"%s\"" % (cmd)
-  try:
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    rc = p.communicate()[0]
-    return rc
-  except OSError:
-    print "Failed running external command."
+    print("run_external: \"%s\"" % (cmd))
+    try:
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        rc = p.communicate()[0]
+        return rc
+    except OSError:
+        print("Failed running external command.")
     return None
 
 def copy_replace_template(ifile, ofile, replacements):
-  x = None
-  with open(ifile, 'r') as f:
-    x = f.read()
-  for k, v in replacements.items():
-    x = re.sub(r':::%s:::' % k, v, x)
-  with open(ofile, 'w') as f:
-    f.write(x)
+    x = None
+    with open(ifile, 'r') as f:
+        x = f.read()
+    for k, v in replacements.items():
+        x = re.sub(r':::%s:::' % k, v, x)
+    with open(ofile, 'w') as f:
+        f.write(x)
 
 if __name__ == "__main__":
-  if len(sys.argv) == 1:
-    print "Usage: %s <project_name>" % sys.argv[0]
-    exit(1)
+    if len(sys.argv) == 1:
+        print("Usage: %s <project_name>" % sys.argv[0])
+        exit(1)
 
-  project = sys.argv[1]
+    project = sys.argv[1]
 
-  print "Make project directory \"%s\"" % project
-  os.mkdir(project)
+    print("Make project directory \"%s\"" % project)
+    os.mkdir(project)
 
-  # change to project directory
-  top_directory = os.getcwd()
-  os.chdir(project)
+    # change to project directory
+    top_directory = os.getcwd()
+    os.chdir(project)
 
-  print "Clone sbutil git repository"
-  run_external(['git', 'clone', 'https://github.com/blatts/sbutil.git'])
+    print("Clone sbutil git repository")
+    run_external(['git', 'clone', 'https://github.com/blatts/sbutil.git'])
 
-  # now have access to templates, copy and substitute
-  tm = time.localtime()
-  replacements = {
-    r'project' : project,
-    r'today' : time.strftime('%Y%m%d', tm),
-    r'year' : time.strftime('%Y', tm),
-    r'author' : 'Sebastian Blatt'
+    # now have access to templates, copy and substitute
+    tm = time.localtime()
+    replacements = {
+        r'project' : project,
+        r'today' : time.strftime('%Y%m%d', tm),
+        r'year' : time.strftime('%Y', tm),
+        r'author' : 'Sebastian Blatt'
     }
 
-  files = [('main.cc', '%s.cc' % project),
-           ('SConstruct', 'SConstruct'),
-           ('SConscript', 'SConscript')]
+    files = [('main.cc', '%s.cc' % project),
+             ('SConstruct', 'SConstruct'),
+             ('SConscript', 'SConscript')]
 
-  for x in files:
-    copy_replace_template(os.path.join('.','sbutil','templates', x[0]),
-                          os.path.join('.', x[1]),
-                          replacements)
+    for x in files:
+        copy_replace_template(os.path.join('.','sbutil','templates', x[0]),
+                              os.path.join('.', x[1]),
+                              replacements)
 
 
 
