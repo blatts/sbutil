@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2016-02-12 16:03:01 sb"
+// Time-stamp: "2018-03-14 15:26:42 srlab"
 
 /*
   file       UDPServer.cc
-  copyright  (c) Sebastian Blatt 2012 -- 2016
+  copyright  (c) Sebastian Blatt 2012 -- 2018
 
  */
 
@@ -18,7 +18,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#if SBUTIL_IS_PLATFORM_OSX || SBUTIL_IS_PLATFORM_LINUX
+#if SBUTIL_IS_PLATFORM_POSIX
 #include <unistd.h>
 #endif
 
@@ -51,8 +51,8 @@ void UDPServer::OpenSocket(){
 
 void UDPServer::CloseSocket(){
   if(fd_socket){
-    close(fd_socket);
-    fd_socket = 0;
+      close(fd_socket);
+      fd_socket = 0;
   }
 }
 

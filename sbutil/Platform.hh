@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2014-02-23 23:38:32 sb"
+// Time-stamp: "2018-03-14 15:26:29 srlab"
 
 /*
   file       Platform.hh
-  copyright  (c) Sebastian Blatt 2014
+  copyright  (c) Sebastian Blatt 2014 -- 2018
 
   Use compiler macros to decide which platform we are on. The specific
   combinations and the rationale for each is very nicely explained here
@@ -24,6 +24,10 @@
 #define SBUTIL_PLATFORM_WIN64 3
 #define SBUTIL_PLATFORM_OSX 4
 #define SBUTIL_PLATFORM_CYGWIN 5
+
+// This is for the mingw64 distribution included with MSYS2 from here:
+// https://www.msys2.org/
+#define SBUTIL_PLATFORM_MSYS2 6
 
 #ifdef SBUTIL_PLATFORM
 #undef SBUTIL_PLATFORM
@@ -66,6 +70,13 @@
 
 #endif
 
+// MSYS2
+#if defined (__CYGWIN__) && defined(WIN32) && defined(_WIN64)
+
+#define SBUTIL_PLATFORM SBUTIL_PLATFORM_MSYS2
+
+#endif
+
 // catch all
 #if not defined (SBUTIL_PLATFORM)
 #define SBUTIL_PLATFORM SBUTIL_PLATFORM_UNKNOWN
@@ -79,12 +90,20 @@
 #define SBUTIL_IS_PLATFORM_CYGWIN (SBUTIL_PLATFORM == SBUTIL_PLATFORM_CYGWIN)
 #define SBUTIL_IS_PLATFORM_WIN32 (SBUTIL_PLATFORM == SBUTIL_PLATFORM_WIN32)
 #define SBUTIL_IS_PLATFORM_WIN64 (SBUTIL_PLATFORM == SBUTIL_PLATFORM_WIN64)
+#define SBUTIL_IS_PLATFORM_MSYS2 (SBUTIL_PLATFORM == SBUTIL_PLATFORM_MSYS2)
 
 // "Windows" = _WIN32 || _WIN64
 #define SBUTIL_IS_PLATFORM_WINDOWS \
   ((SBUTIL_PLATFORM == SBUTIL_PLATFORM_WIN64) ||  \
-   (SBUTIL_PLATFORM == SBUTIL_PLATFORM_WIN32))
+   (SBUTIL_PLATFORM == SBUTIL_PLATFORM_WIN32) ||  \
+   (SBUTIL_PLATFORM == SBUTIL_PLATFORM_MSYS2))
 
+// "POSIX" = LINUX, OSX, CYGWIN, MSYS2
+#define SBUTIL_IS_PLATFORM_POSIX \
+    ((SBUTIL_PLATFORM == SBUTIL_PLATFORM_LINUX) ||  \
+     (SBUTIL_PLATFORM == SBUTIL_PLATFORM_OSX) || \
+     (SBUTIL_PLATFORM == SBUTIL_PLATFORM_CYGWIN) || \
+     (SBUTIL_PLATFORM == SBUTIL_PLATFORM_MSYS2))
 
 #endif // PLATFORM_HH__5E8B7EE0_AF6C_43A9_AD57_7151BF624896
 

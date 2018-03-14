@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2016-11-03 16:17:33 sb"
+# Time-stamp: "2018-03-14 14:57:11 srlab"
 
 #  file       SConstruct
-#  copyright  (c) Sebastian Blatt 2016
+#  copyright  (c) Sebastian Blatt 2018
 
 import os
 import platform
@@ -19,8 +19,12 @@ def determine_platform():
         return 'osx'
     elif x == ('posix', 'Linux'):
         return 'linux'
+    elif x[0] == 'posix' and x[1][0:10] == 'MINGW64_NT':
+        return 'mingw64'
+    elif x == ('nt', 'Windows'):
+        return 'windows'
     else:
-        raise "SConstruct: unsupported (os, platform) = {}".format(x)
+        raise BaseException("SConstruct: unsupported (os, platform) = {}".format(x))
 
 PLATFORM = determine_platform()
 print("Running on \"{}\"".format(PLATFORM))
@@ -37,6 +41,10 @@ def auto_detect_base_directories():
     elif PLATFORM == 'osx':
         # support default fink prefix /sw
         auto_rootdirs = ('/sw', '/usr/local', '/opt')
+    elif PLATFORM == 'mingw64':
+        auto_rootdirs = ('/mingw64',)
+    elif PLATFORM == 'windows':
+        auto_rootdirs = ()
 
     auto_include_directories = []
     auto_library_directories = []
@@ -51,7 +59,12 @@ def auto_detect_base_directories():
 
     return auto_rootdirs, auto_include_directories, auto_library_directories
 
-AUTO_ROOTDIRS, AUTO_INCLUDE_DIRS, AUTO_LIB_DIRS = auto_detect_base_directories()
+AUTO_ROOTDIRS = []
+AUTO_INCLUDE_DIRS = []
+AUTO_LIB_DIRS = []
+
+if PLATFORM != 'windows':
+    AUTO_ROOTDIRS, AUTO_INCLUDE_DIRS, AUTO_LIB_DIRS = auto_detect_base_directories()
 
 
 def auto_detect_file(parent_paths, relative_path):
@@ -92,6 +105,10 @@ def auto_detect_library(linkflag):
         pattern = r'lib' + linkflag + r'(\.[0-9]+)*\.(a|dylib)$'
     elif PLATFORM == 'linux':
         pattern = r'lib' + linkflag + r'\.(a|so)(\.[0-9]+)*$'
+    elif PLATFORM == 'mingw64':
+        pattern = r'lib'
+    elif PLATFORM == 'windows':
+        pattern = linkflag + r'\.dll$'
 
     return auto_detect_file_regex(AUTO_LIB_DIRS, pattern)
 
@@ -166,9 +183,9 @@ def MakeAutoPackageTest(name,
             ret = context.TryLink(src, '.cc')
             rc = ret == 1
             if not rc:
-                raise Exception('linking failed.')
+                raise BaseException('linking failed.')
 
-        except Exception as e:
+        except BaseException as e:
             context.Message(e.message)
             context.Result('no')
             return rc
@@ -193,7 +210,7 @@ class TestExternalCall(object):
             self.out, self.err = p.communicate()
             self.returncode = p.returncode
             if self.returncode != 0:
-                raise Exception('Command %s failed with code %d.\n%s' %
+                raise BaseException('Command %s failed with code %d.\n%s' %
                                 (command_list, self.returncode, self.err))
             return self.returncode == 0
         except OSError as e:
@@ -282,7 +299,7 @@ def MakePkgConfigTest(name,
         try:
             rc = c.get_all()
             if not rc:
-                raise Exception('{} failed'.format(external_command))
+                raise BaseException('{} failed'.format(external_command))
             c.append_to_environment(context.env)
 
             include_src = '\n'.join(['#include <{}>'.format(h) for h in headers])
@@ -295,9 +312,9 @@ def MakePkgConfigTest(name,
             ret = context.TryLink(src, '.cc')
             rc = ret == 1
             if not rc:
-                raise Exception('linking failed.')
+                raise BaseException('linking failed.')
 
-        except Exception as e:
+        except BaseException as e:
             context.Message(e.message)
             context.Result('no')
             return c.returncode
@@ -319,7 +336,7 @@ def create_environment():
         env = Environment()
 
     for key in ['CC', 'CXX']:
-        if os.environ.has_key(key):
+        if key in os.environ:
             env[key] = os.environ[key]
     return env
 
@@ -357,9 +374,9 @@ def do_autoconf(env):
              'CheckHDF5': MakeAutoPackageTest('HDF5',
                                               headers = ['hdf5.h'],
                                               libs = ['hdf5']),
-             'CheckGLFW3': MakeAutoPackageTest('GLFW3',
-                                               headers = ['GLFW/glfw3.h'],
-                                               libs = ['glfw3']),
+             # 'CheckGLFW3': MakeAutoPackageTest('GLFW3',
+             #                                   headers = ['GLFW/glfw3.h'],
+             #                                   libs = ['glfw3']),
     }
     conf = Configure(env, custom_tests=tests)
 
@@ -385,9 +402,9 @@ def do_autoconf(env):
         Exit(0)
 
     # check GLFW3
-    if not conf.CheckGLFW3():
-        print('Need the GLFW3 library.')
-        Exit(0)
+    # if not conf.CheckGLFW3():
+    #     print('Need the GLFW3 library.')
+    #     Exit(0)
 
     env = conf.Finish()
 
