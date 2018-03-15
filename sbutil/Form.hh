@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2018-03-15 18:00:01 srlab"
+// Time-stamp: "2018-03-15 18:03:56 srlab"
 
 /*
   file       Form.hh
@@ -340,42 +340,43 @@ namespace form
       private:
         first_form& ff;
         second_form& sf;
+        const char* separator;
         const char* open;
         const char* close;
-        const char* separator;
 
       public:
         pair(first_form& ff_,
              second_form& sf_,
+             const char* separator_ = FORM_LIST_DEFAULT_SEPARATOR,
              const char* open_ = FORM_LIST_DEFAULT_OPEN,
-             const char* close_ = FORM_LIST_DEFAULT_CLOSE,
-             const char* separator_ = FORM_LIST_DEFAULT_SEPARATOR
+             const char* close_ = FORM_LIST_DEFAULT_CLOSE
             )
             : base<T>(),
             ff(ff_),
             sf(sf_),
+            separator(separator_),
             open(open_),
-            close(close_),
-            separator(separator_)
+            close(close_)
         {}
         pair(const T& t_,
              first_form& ff_,
              second_form& sf_,
+             const char* separator_ = FORM_LIST_DEFAULT_SEPARATOR,
              const char* open_ = FORM_LIST_DEFAULT_OPEN,
-             const char* close_ = FORM_LIST_DEFAULT_CLOSE,
-             const char* separator_ = FORM_LIST_DEFAULT_SEPARATOR
+             const char* close_ = FORM_LIST_DEFAULT_CLOSE
             )
             : base<T>(t_),
             ff(ff_),
             sf(sf_),
+            separator(separator_),
             open(open_),
-            close(close_),
-            separator(separator_)
+            close(close_)
         {}
         std::ostream& output(std::ostream& out) const {
             const T& t = base<T>::get_wrapped();
             out << open
-                << ff.bind(t.first) << separator
+                << ff.bind(t.first)
+                << separator
                 << sf.bind(t.second)
                 << close;
             return out;
@@ -388,12 +389,12 @@ namespace form
     pair<std::pair<typename first_form::type, typename second_form::type>,
          first_form, second_form> make_pair(first_form& ff_,
                                             second_form& sf_,
+                                            const char* separator_ = FORM_LIST_DEFAULT_SEPARATOR,
                                             const char* open_ = FORM_LIST_DEFAULT_OPEN,
-                                            const char* close_ = FORM_LIST_DEFAULT_CLOSE,
-                                            const char* separator_ = FORM_LIST_DEFAULT_SEPARATOR)
+                                            const char* close_ = FORM_LIST_DEFAULT_CLOSE)
     {
         return pair<std::pair<typename first_form::type, typename second_form::type>,
-                    first_form, second_form> (ff_, sf_, open_, close_, separator_);
+                    first_form, second_form> (ff_, sf_, separator_, open_, close_);
     }
 
 
