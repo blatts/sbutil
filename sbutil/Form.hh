@@ -1,5 +1,5 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2018-03-15 18:03:56 srlab"
+// Time-stamp: "2018-03-19 12:53:05 sb"
 
 /*
   file       Form.hh
@@ -322,6 +322,93 @@ namespace form
                )
     {
         return vector<std::vector<typename item_form::type>, item_form>
+        (x_, f_, separator_, open_, close_);
+    }
+
+// ----------------------------------------------------------------------- array
+
+ #define FORM_ARRAY_DEFAULT_SEPARATOR ", "
+ #define FORM_ARRAY_DEFAULT_OPEN "[ "
+ #define FORM_ARRAY_DEFAULT_CLOSE " ]"
+
+    template <typename T,
+              typename item_form = identity<typename T::value_type>
+              >
+    class array : public base<T> {
+      private:
+        item_form& f;
+        const char* separator;
+        const char* open;
+        const char* close;
+
+      public:
+        array(item_form& f_,
+               const char* separator_ = FORM_ARRAY_DEFAULT_SEPARATOR,
+               const char* open_ = FORM_ARRAY_DEFAULT_OPEN,
+               const char* close_ = FORM_ARRAY_DEFAULT_CLOSE
+              )
+            : base<T>(),
+              f(f_),
+              separator(separator_),
+              open(open_),
+              close(close_)
+        {}
+
+        array(const T& t_,
+               item_form& f_,
+               const char* separator_ = FORM_ARRAY_DEFAULT_SEPARATOR,
+               const char* open_ = FORM_ARRAY_DEFAULT_OPEN,
+               const char* close_ = FORM_ARRAY_DEFAULT_CLOSE
+              )
+            : base<T>(t_),
+              f(f_),
+              separator(separator_),
+              open(open_),
+              close(close_)
+        {}
+
+        std::ostream& output(std::ostream& out) const {
+            const T& t = base<T>::get_wrapped();
+            out << open;
+            for(auto cit = t.begin(); cit != t.end(); ++cit){
+                out << f.bind(*cit);
+                if(cit + 1 != t.end()) {
+                    out << separator;
+                }
+            }
+            out << close;
+            return out;
+        }
+    };
+
+// Convenience constructor wrappers so we do not have to specify the
+// lengthy templated types for normal use. Modelled after
+// std::make_pair.
+
+// unbound version
+    template<typename item_form, std::size_t N>
+    array<std::array<typename item_form::type, N>, item_form>
+    make_array(item_form& f_,
+                const char* separator_ = FORM_ARRAY_DEFAULT_SEPARATOR,
+                const char* open_ = FORM_ARRAY_DEFAULT_OPEN,
+                const char* close_ = FORM_ARRAY_DEFAULT_CLOSE
+               )
+    {
+        return array<std::array<typename item_form::type, N>, item_form>
+        (f_, separator_, open_, close_);
+    }
+
+// bound version
+    template<typename item_form, std::size_t N>
+    array<std::array<typename item_form::type, N>, item_form>
+    make_array(std::array<typename item_form::type, N>& x_,
+                item_form& f_,
+                const char* separator_ = FORM_ARRAY_DEFAULT_SEPARATOR,
+                const char* open_ = FORM_ARRAY_DEFAULT_OPEN,
+                const char* close_ = FORM_ARRAY_DEFAULT_CLOSE
+               )
+    {
+        return array<std::array<typename item_form::type, N>, item_form>
         (x_, f_, separator_, open_, close_);
     }
 

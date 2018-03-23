@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-03-08 23:59:45 sb"
+// Time-stamp: "2018-03-22 16:49:14 sb"
 
 /*
   file       HDF5File.hh
-  copyright  (c) Sebastian Blatt 2012, 2013, 2014, 2015
+  copyright  (c) Sebastian Blatt 2012 -- 2018
 
   Wraps libhdf5 functions to simplify creating HDF5 files.
 
@@ -15,7 +15,7 @@
 
 #include <string>
 #include <vector>
-
+/*
 // Want to include this since HDF5 internals can be exposed by the
 // classes below.
 extern "C" {
@@ -50,6 +50,10 @@ typedef struct gsl_matrix_complex gsl_matrix_complex;
 #endif
 
 #endif // COMPILING_THIS_SHIT_C9911449_35DB_497B_8A56_7978C1957F3B
+*/
+#include <hdf5.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
 
 namespace HDF5
 {
