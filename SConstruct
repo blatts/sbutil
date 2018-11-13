@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2018-03-14 14:57:11 srlab"
+# Time-stamp: "2018-11-13 18:41:01 sb"
 
 #  file       SConstruct
 #  copyright  (c) Sebastian Blatt 2018
@@ -37,7 +37,7 @@ def auto_detect_base_directories():
     """
     auto_rootdirs = None
     if PLATFORM == 'linux':
-        auto_rootdirs = ('/usr/local', '/opt')
+        auto_rootdirs = ('/usr', '/usr/local', '/opt')
     elif PLATFORM == 'osx':
         # support default fink prefix /sw
         auto_rootdirs = ('/sw', '/usr/local', '/opt')
@@ -81,6 +81,7 @@ def auto_detect_file(parent_paths, relative_path):
         print('SConstruct WARNING: found "{}" in multiple ' + \
               'root directories:\n  {}\n' + \
               '  default to {}'.format(relative_path, rc, rc[0]))
+
     return rc[0], os.path.join(rc[0], relative_path)
 
 def auto_detect_header(relative_path):
