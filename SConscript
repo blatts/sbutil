@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2016-06-08 14:05:43 sb"
+# Time-stamp: "2019-12-10 17:36:50 sb"
 
 #  file       SConscript
-#  copyright  (c) Sebastian Blatt 2013, 2014, 2015, 2016
+#  copyright  (c) Sebastian Blatt 2013 -- 2019
 
 # environment variables:
 #   LIBPATH, LIBS, ASFLAGS, LINKFLAGS, CPPFLAGS, CPPPATH, CCFLAGS

@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- mode: Python; coding: latin-1 -*-
-# Time-stamp: "2018-11-13 18:41:01 sb"
+# Time-stamp: "2019-12-10 17:43:28 sb"
 
 #  file       SConstruct
-#  copyright  (c) Sebastian Blatt 2018
+#  copyright  (c) Sebastian Blatt 2018, 2019
 
 import os
 import platform
@@ -39,8 +39,7 @@ def auto_detect_base_directories():
     if PLATFORM == 'linux':
         auto_rootdirs = ('/usr', '/usr/local', '/opt')
     elif PLATFORM == 'osx':
-        # support default fink prefix /sw
-        auto_rootdirs = ('/sw', '/usr/local', '/opt')
+        auto_rootdirs = ('/usr/local', '/opt')
     elif PLATFORM == 'mingw64':
         auto_rootdirs = ('/mingw64',)
     elif PLATFORM == 'windows':
@@ -98,7 +97,7 @@ def auto_detect_file_regex(parent_paths, regex):
             if m is not None:
                 rc.append(p)
                 libs.append(os.path.join(p, f))
-    return rc[0], libs
+    return rc[0] if rc else None, libs
 
 def auto_detect_library(linkflag):
     pattern = None
@@ -209,6 +208,8 @@ class TestExternalCall(object):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
             self.out, self.err = p.communicate()
+            self.out = self.out.decode('utf-8')
+            self.err = self.err.decode('utf-8')
             self.returncode = p.returncode
             if self.returncode != 0:
                 raise BaseException('Command %s failed with code %d.\n%s' %
@@ -316,7 +317,8 @@ def MakePkgConfigTest(name,
                 raise BaseException('linking failed.')
 
         except BaseException as e:
-            context.Message(e.message)
+            #context.Message(e.message)
+            context.Message(str(e))
             context.Result('no')
             return c.returncode
 

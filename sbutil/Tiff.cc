@@ -1,9 +1,9 @@
 // -*- mode: C++ -*-
-// Time-stamp: "2015-08-20 21:25:19 sb"
+// Time-stamp: "2019-12-10 17:45:10 sb"
 
 /*
   file       Tiff.cc
-  copyright  (c) Sebastian Blatt 2009 -- 2015
+  copyright  (c) Sebastian Blatt 2009 -- 2019
 
  */
 
@@ -17,8 +17,8 @@
 
 
 
-// simple class used with a TIFF file pointer to be used with an
-// auto_ptr so that the file is closed when leaving the scope.
+// simple class used with a TIFF file pointer to be used with a
+// unique_ptr so that the file is closed when leaving the scope.
 class TiffFile {
   public:
     TIFF* image;
@@ -52,7 +52,11 @@ Tiff::~Tiff(){
 }
 
 bool Tiff::load_file(const std::string& f, size_t n){
-  std::auto_ptr<TiffFile> p(new TiffFile);
+ #if __cplusplus < 201100L
+    std::auto_ptr<TiffFile> p(new TiffFile);
+ #else
+    std::unique_ptr<TiffFile> p(new TiffFile);
+ #endif
 
   try{
     if(!p->open_file(f)){
